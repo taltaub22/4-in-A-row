@@ -6,7 +6,7 @@ public class Main {
     public static void main(String[] args) {
         LogicBoard lb = new LogicBoard();
         try {
-            lb.insertChecker(3);
+            lb.insertChecker(3,Players.PLAYERS.PLAYER1);
         } catch (NotInBoardException e) {
             e.printStackTrace();
         } catch (ColumnFullException e) {
@@ -15,7 +15,7 @@ public class Main {
 
 
         try {
-            lb.insertChecker(3);
+            lb.insertChecker(3, Players.PLAYERS.PLAYER1);
         } catch (NotInBoardException e) {
             e.printStackTrace();
         } catch (ColumnFullException e) {
@@ -23,14 +23,14 @@ public class Main {
         }
 
         try {
-            lb.insertChecker(2);
+            lb.insertChecker(2,Players.PLAYERS.PLAYER2);
         } catch (NotInBoardException e) {
             e.printStackTrace();
         } catch (ColumnFullException e) {
             e.printStackTrace();
         }
 
-        int[][] a = lb.getBoard();
+        Players.PLAYERS[][] a = lb.getBoard();
     }
 
 

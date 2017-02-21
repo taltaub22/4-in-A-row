@@ -3,7 +3,7 @@ import javafx.scene.control.TableCell;
 /**
  * Created by Tal Taub on 19/02/2017.
  */
-public class LogicBoard implements Players{
+public class LogicBoard implements Players {
 
     private PLAYERS[][] board;
 
@@ -38,30 +38,28 @@ public class LogicBoard implements Players{
     * @param player The player who inserted the checker.
     * @return The row the checker was inserted to.
     * */
-    public int insertChecker(int col,PLAYERS player) throws NotInBoardException, ColumnFullException {
+    public int insertChecker(int col, PLAYERS player) throws NotInBoardException, ColumnFullException {
         if (col < 0 && col > 6)
-            throw new NotInBoardException("");
+            throw new NotInBoardException();
 
-        int i = 0;
-        for (; i < 6 && board[i][col] != PLAYERS.NONE; i++) ;
+        int i = 5;
+        for (; i >= 0 && board[i][col] != PLAYERS.NONE; i--) ;
         if (i >= 1) {
-            board[i - 1][col] = player;
-            return i-1;
+            board[i][col] = player;
+            return i;
         } else {
             throw new ColumnFullException();
         }
     }
 
 
-    public PLAYERS checkWin(int col,int row,PLAYERS player) {
+    public PLAYERS checkWin(int col, int row, PLAYERS player) {
 
-        for (int i = row; i < board.length ; i++) {
+        for (int i = row; i < board.length; i++) {
             for (int j = col; j < board[i].length; j++) {
-                
+
             }
         }
-
-
 
 
         return player;

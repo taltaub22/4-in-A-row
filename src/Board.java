@@ -8,7 +8,6 @@ public class Board {
 
     public Board() {
 
-        lb.insertChecker()
     }
 
     public GraphicalBoard getGb() {
