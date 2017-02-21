@@ -9,9 +9,7 @@ public class LogicBoard implements Players {
 
 
     public LogicBoard() {
-
         initBoard();
-
     }
 
     public PLAYERS[][] getBoard() {
@@ -54,14 +52,13 @@ public class LogicBoard implements Players {
 
 
     public PLAYERS checkWin(int col, int row, PLAYERS player) {
-
         for (int i = row; i < board.length; i++) {
             for (int j = col; j < board[i].length; j++) {
 
+
+
             }
         }
-
-
         return player;
     }
 }

@@ -7,7 +7,8 @@ public class Board {
     private LogicBoard lb;
 
     public Board() {
-
+        lb = new LogicBoard();
+        gb = new GraphicalBoard();
     }
 
     public GraphicalBoard getGb() {

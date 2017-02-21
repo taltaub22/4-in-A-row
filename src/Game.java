@@ -5,10 +5,15 @@ public class Game implements Players {
 
 
     private Board board;
-    private static PLAYERS CurrentPlayer;
+    private static PLAYERS CurrentPlayer = PLAYERS.PLAYER1;
 
     public Game() {
         board = new Board();
+
+
+
+
+
     }
 
 
