@@ -29,15 +29,16 @@ public class Board {
         this.lb = lb;
     }
 
-    public void insertChecker(int col, Players.PLAYERS player) {
+    public boolean insertChecker(int col, Players.PLAYERS player) {
         try {
             lb.insertChecker(col, player);
         } catch (NotInBoardException e) {
             e.printStackTrace();
         } catch (ColumnFullException e) {
-            JOptionPane.showMessageDialog(new JFrame(), "Column is full, Choose another one!");
+            return false;
         }
         gb.insertChecker(col, player);
+        return true;
     }
 
 }

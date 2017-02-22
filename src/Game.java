@@ -8,9 +8,8 @@ import java.awt.event.ActionListener;
  */
 public class Game extends JFrame implements Players {
 
-
     private Board board;
-    private static PLAYERS CurrentPlayer = PLAYERS.PLAYER1;
+    private static PLAYERS currentPlayer = PLAYERS.PLAYER1;
 
     public Game() {
         board = new Board();
@@ -24,7 +23,10 @@ public class Game extends JFrame implements Players {
         System.out.println(this.getWidth() + "," + this.getHeight());
 
         JButton buttons[] = new JButton[7];
+        JLabel curPlayer = new JLabel();
         JPanel buttonPanel = new JPanel();
+        buttonPanel.add(curPlayer);
+
 
         for (int i = 0; i < buttons.length; i++) {
             int x = i;
@@ -33,13 +35,13 @@ public class Game extends JFrame implements Players {
             buttons[i].addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    try {
-                        board.getLb().insertChecker(x, Players.PLAYERS.PLAYER1);
-                    } catch (NotInBoardException e1) {
-                        e1.printStackTrace();
-                    } catch (ColumnFullException e1) {
-                        e1.printStackTrace();
+                    Boolean flag = false;
+                    while (!flag) {
+                        flag = board.insertChecker(x, currentPlayer);
                     }
+                    currentPlayer = (currentPlayer == PLAYERS.PLAYER1) ? PLAYERS.PLAYER2 : PLAYERS.PLAYER1;
+                    curPlayer.setText("Current Player is:" + currentPlayer);
+                    System.out.println(currentPlayer);
                 }
             });
         }
