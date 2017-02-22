@@ -40,4 +40,9 @@ public class GraphicalBoard extends JPanel {
         g.drawImage(ii.getImage(), 0, 0, null);
     }
 
+    public void insertChecker (int col, Players.PLAYERS player)
+    {
+
+    }
+
 }

@@ -1,3 +1,5 @@
+import javax.swing.*;
+
 /**
  * Created by Tal Taub on 19/02/2017.
  */
@@ -27,5 +29,15 @@ public class Board {
         this.lb = lb;
     }
 
+    public void insertChecker(int col, Players.PLAYERS player) {
+        try {
+            lb.insertChecker(col, player);
+        } catch (NotInBoardException e) {
+            e.printStackTrace();
+        } catch (ColumnFullException e) {
+            JOptionPane.showMessageDialog(new JFrame(), "Column is full, Choose another one!");
+        }
+        gb.insertChecker(col, player);
+    }
 
 }
