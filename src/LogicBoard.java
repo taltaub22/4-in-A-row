@@ -40,14 +40,14 @@ public class LogicBoard implements Players {
         if (col < 0 && col > 6)
             throw new NotInBoardException();
 
-        int i = 5;
-        for (; i >= 0 && board[i][col] != PLAYERS.NONE; i--) ;
-        if (i >= 1) {
-            board[i][col] = player;
-            return i;
-        } else {
+        if (board[0][col] != PLAYERS.NONE) {
             throw new ColumnFullException();
         }
+
+        int i = 5;
+        for (; i >= 0 && board[i][col] != PLAYERS.NONE; i--) ;
+        board[i][col] = player;
+        return i;
     }
 
 
@@ -56,9 +56,22 @@ public class LogicBoard implements Players {
             for (int j = col; j < board[i].length; j++) {
 
 
-
             }
         }
         return player;
     }
+
+    public boolean checkWinCol(int col, int row, PLAYERS player) {
+        int count = 0;
+        if (board.length - row < 4)
+            return false;
+
+        for (int i = row; i < board.length && board[i][col] == player; i++,count++);
+
+        if(count >= 4)
+            return true;
+
+        return false;
+    }
+
 }

@@ -35,6 +35,7 @@ public class Board {
         } catch (NotInBoardException e) {
             e.printStackTrace();
         } catch (ColumnFullException e) {
+            JOptionPane.showMessageDialog(null,"Column is full, choose another one.");
             return false;
         }
         gb.insertChecker(col, player);

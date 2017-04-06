@@ -1,7 +1,6 @@
 import javafx.geometry.Pos;
 
 import javax.swing.*;
-import javax.xml.stream.Location;
 import java.awt.*;
 
 /**
@@ -9,13 +8,13 @@ import java.awt.*;
  */
 public class GraphicalChecker extends JLabel {
 
-
     private Players.PLAYERS player;
     private Point location;
 
     public GraphicalChecker(Players.PLAYERS player) {
         this.player = player;
         location = new Point(0, 0);
+        setVisible(true);
     }
 
     @Override
@@ -32,6 +31,7 @@ public class GraphicalChecker extends JLabel {
 
     public void setPlayer(Players.PLAYERS player) {
         this.player = player;
+        repaint();
     }
 
     @Override

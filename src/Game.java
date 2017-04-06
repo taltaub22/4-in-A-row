@@ -13,7 +13,6 @@ public class Game extends JFrame implements Players {
 
     public Game() {
         board = new Board();
-
         setSize(1040, 900 + 30 + 40);
         setResizable(false);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -36,19 +35,19 @@ public class Game extends JFrame implements Players {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     Boolean flag = false;
-                    while (!flag) {
-                        flag = board.insertChecker(x, currentPlayer);
+                    flag = board.insertChecker(x, currentPlayer);
+                    if (flag) {
+                        currentPlayer = (currentPlayer == PLAYERS.PLAYER1) ? PLAYERS.PLAYER2 : PLAYERS.PLAYER1;
+                        curPlayer.setText("Current Player is:" + currentPlayer);
                     }
-                    currentPlayer = (currentPlayer == PLAYERS.PLAYER1) ? PLAYERS.PLAYER2 : PLAYERS.PLAYER1;
-                    curPlayer.setText("Current Player is:" + currentPlayer);
                     System.out.println(currentPlayer);
                 }
             });
         }
         add(buttonPanel, BorderLayout.NORTH);
         add(board.getGb(), BorderLayout.CENTER);
-
         setVisible(true);
+
 
 
     }

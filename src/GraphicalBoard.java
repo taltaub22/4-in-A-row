@@ -38,9 +38,6 @@ public class GraphicalBoard extends JPanel {
 
     public void insertChecker(int col, Players.PLAYERS player) {
         int i = 5;
-        for (; i >= 0 && checkers[i][col].getPlayer() != Players.PLAYERS.NONE; i--) ;
-        checkers[i][col] = new GraphicalChecker(player);
-        checkers[i][col].setLocation(0,0);
-        add(checkers[i][col],i,col);
+
     }
 }
