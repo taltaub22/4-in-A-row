@@ -56,7 +56,8 @@ public class LogicalBoard implements Players {
 
     public PLAYERS checkWin(int col, int row, PLAYERS player) {
 
-        checkWinCol(col, row,player);
+        checkWinCol(col, row, player);
+        System.out.println(player + " Win row?" + checkWinRow(col, row, player));
 
         return player;
     }
@@ -70,6 +71,20 @@ public class LogicalBoard implements Players {
                 return true;
         }
         return false;
+    }
+
+    public boolean checkWinRow(int col, int row, PLAYERS player) {
+        int count = 0;
+        int checkLeft = col - 4 <= 0 ? 0 : col - 4;
+        int checkRight = 6 - 4 + col >= 6 ? 6 : 6 - 4 + col;
+
+
+        for (int i = checkLeft; i < checkRight && board[row][i] == player; i++, count++) ;
+        if (count >= 4)
+            return true;
+
+        return false;
+
     }
 
 }
