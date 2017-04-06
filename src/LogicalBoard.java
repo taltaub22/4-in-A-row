@@ -47,30 +47,28 @@ public class LogicalBoard implements Players {
         int i = 5;
         for (; i >= 0 && board[i][col] != PLAYERS.NONE; i--) ;
         board[i][col] = player;
+
+        checkWin(col, i, player);
+
         return i;
     }
 
 
     public PLAYERS checkWin(int col, int row, PLAYERS player) {
-        for (int i = row; i < board.length; i++) {
-            for (int j = col; j < board[i].length; j++) {
 
+        checkWinCol(col, row,player);
 
-            }
-        }
         return player;
     }
 
     public boolean checkWinCol(int col, int row, PLAYERS player) {
         int count = 0;
-        if (board.length - row < 4)
-            return false;
-
-        for (int i = row; i < board.length && board[i][col] == player; i++,count++);
-
-        if(count >= 4)
-            return true;
-
+        if (row <= 2) {
+            int i = 5;
+            for (; i >= row && board[i][col] == player; i--, count++) ;
+            if (count >= 4)
+                return true;
+        }
         return false;
     }
 
