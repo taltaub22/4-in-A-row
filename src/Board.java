@@ -6,10 +6,10 @@ import javax.swing.*;
 public class Board {
 
     private GraphicalBoard gb;
-    private LogicBoard lb;
+    private LogicalBoard lb;
 
     public Board() {
-        lb = new LogicBoard();
+        lb = new LogicalBoard();
         gb = new GraphicalBoard();
     }
 
@@ -21,11 +21,11 @@ public class Board {
         this.gb = gb;
     }
 
-    public LogicBoard getLb() {
+    public LogicalBoard getLb() {
         return lb;
     }
 
-    public void setLb(LogicBoard lb) {
+    public void setLb(LogicalBoard lb) {
         this.lb = lb;
     }
 

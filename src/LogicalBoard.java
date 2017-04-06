@@ -3,12 +3,12 @@ import javafx.scene.control.TableCell;
 /**
  * Created by Tal Taub on 19/02/2017.
  */
-public class LogicBoard implements Players {
+public class LogicalBoard implements Players {
 
     private PLAYERS[][] board;
 
 
-    public LogicBoard() {
+    public LogicalBoard() {
         initBoard();
     }
 
@@ -34,7 +34,7 @@ public class LogicBoard implements Players {
     * checker got inserted into in the column provided in the paramter.
     * @param col The col to insert a checker in.
     * @param player The player who inserted the checker.
-    * @return The row the checker was inserted to.
+    * @return The row that checker was inserted to.
     * */
     public int insertChecker(int col, PLAYERS player) throws NotInBoardException, ColumnFullException {
         if (col < 0 && col > 6)

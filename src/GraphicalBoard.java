@@ -6,10 +6,10 @@ import java.awt.*;
  */
 public class GraphicalBoard extends JPanel {
 
-    private GraphicalChecker[][] checkers;
+    private GraphicalChecker[][] board;
 
     public GraphicalBoard() {
-        checkers = new GraphicalChecker[6][7];
+        board = new GraphicalChecker[6][7];
         initBoard();
         setSize(1038, 900);
         setLayout(new GridLayout(6,7));
@@ -31,13 +31,15 @@ public class GraphicalBoard extends JPanel {
     {
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j <7 ; j++) {
-                checkers[i][j] = new GraphicalChecker(Players.PLAYERS.NONE);
+                board[i][j] = new GraphicalChecker(Players.PLAYERS.NONE);
+                add(board[i][j]);
             }
         }
     }
 
     public void insertChecker(int col, Players.PLAYERS player) {
         int i = 5;
-
+        for (; i >= 0 && board[i][col].getPlayer() != Players.PLAYERS.NONE; i--) ;
+        board[i][col].setPlayer(player);
     }
 }

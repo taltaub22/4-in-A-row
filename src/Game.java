@@ -13,7 +13,8 @@ public class Game extends JFrame implements Players {
 
     public Game() {
         board = new Board();
-        setSize(1040, 900 + 30 + 40);
+        setVisible(true);
+        setSize(1040, 900 + 50 + 40);
         setResizable(false);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         Toolkit tk = Toolkit.getDefaultToolkit();
@@ -24,12 +25,14 @@ public class Game extends JFrame implements Players {
         JButton buttons[] = new JButton[7];
         JLabel curPlayer = new JLabel();
         JPanel buttonPanel = new JPanel();
-        buttonPanel.add(curPlayer);
+        buttonPanel.setSize(this.getWidth(),150);
+      //  buttonPanel.add(curPlayer);
 
 
         for (int i = 0; i < buttons.length; i++) {
             int x = i;
             buttons[i] = new JButton("Column " + (i + 1));
+            buttons[i].setPreferredSize(new Dimension(137,50));
             buttonPanel.add(buttons[i]);
             buttons[i].addActionListener(new ActionListener() {
                 @Override
@@ -46,7 +49,6 @@ public class Game extends JFrame implements Players {
         }
         add(buttonPanel, BorderLayout.NORTH);
         add(board.getGb(), BorderLayout.CENTER);
-        setVisible(true);
 
 
 

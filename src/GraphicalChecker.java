@@ -13,16 +13,16 @@ public class GraphicalChecker extends JLabel {
 
     public GraphicalChecker(Players.PLAYERS player) {
         this.player = player;
-        location = new Point(0, 0);
+        location = new Point(10, -7);
         setVisible(true);
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        ImageIcon cheker;
-        cheker = new ImageIcon("Images/" + player.toString() + ".png");
-        g.drawImage(cheker.getImage(), location.x, location.y, null);
+        ImageIcon checker;
+        checker = new ImageIcon("Images/" + player.toString() + ".png");
+        g.drawImage(checker.getImage(), location.x, location.y, null);
     }
 
     public Players.PLAYERS getPlayer() {
