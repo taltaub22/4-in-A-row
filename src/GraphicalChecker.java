@@ -13,7 +13,7 @@ public class GraphicalChecker extends JLabel {
 
     public GraphicalChecker(Players.PLAYERS player) {
         this.player = player;
-        location = new Point(10, -7);
+        location = new Point(0, 0);
         setVisible(true);
     }
 

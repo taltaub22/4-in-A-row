@@ -6,7 +6,7 @@ import javafx.scene.control.TableCell;
 public class LogicalBoard implements Players {
 
     private PLAYERS[][] board;
-
+    public static int turn;
 
     public LogicalBoard() {
         initBoard();
@@ -44,11 +44,18 @@ public class LogicalBoard implements Players {
             throw new ColumnFullException();
         }
 
+        turn++;
+        PLAYERS winner = PLAYERS.NONE;
+
         int i = 5;
         for (; i >= 0 && board[i][col] != PLAYERS.NONE; i--) ;
         board[i][col] = player;
 
-        checkWin(col, i, player);
+        if (turn / 2 >= 4)
+            winner = checkWin(col, i, player);
+
+        //if(winner != PLAYERS.NONE)
+            //TODO: handle winner & end game
 
         return i;
     }
@@ -57,7 +64,8 @@ public class LogicalBoard implements Players {
     public PLAYERS checkWin(int col, int row, PLAYERS player) {
 
         checkWinCol(col, row, player);
-        System.out.println(player + " Win row?" + checkWinRow(col, row, player));
+        checkWinRow(col, row, player);
+        System.out.println("Wind main diagonal? " + player + " " + checkWinMainDiagonal(col, row, player));
 
         return player;
     }
@@ -66,7 +74,7 @@ public class LogicalBoard implements Players {
         int count = 0;
         if (row <= 2) {
             int i = 5;
-            for (; i >= row && board[i][col] == player; i--, count++) ;
+            for (; i >= row && board[i][col] == player && count < 4; i--, count++) ;
             if (count >= 4)
                 return true;
         }
@@ -75,16 +83,32 @@ public class LogicalBoard implements Players {
 
     public boolean checkWinRow(int col, int row, PLAYERS player) {
         int count = 0;
-        int checkLeft = col - 4 <= 0 ? 0 : col - 4;
-        int checkRight = 6 - 4 + col >= 6 ? 6 : 6 - 4 + col;
+        int checkRight = col + (4 - 1) >= 6 ? 6 : col + (4 - 1);
+        int checkLeft = col - (4 - 1) <= 0 ? 0 : col - (4 - 1);
 
-
-        for (int i = checkLeft; i < checkRight && board[row][i] == player; i++, count++) ;
+        for (int i = checkLeft; i < checkRight && board[row][i] == player && count < 4; i++, count++) ;
         if (count >= 4)
             return true;
 
         return false;
+    }
+
+    public boolean checkWinMainDiagonal(int col, int row, PLAYERS player) {
+
+        int count = 0;
+
+        int sCol = col, sRow = row;
+
+        for (int i = 0; i < 3 && sCol < 6 && sRow < 5 && board[sRow][sCol] == player; i++, sRow++, sCol++, count++) ;
+        sCol = col;
+        sRow = row;
+        for (int i = 0; i < 3 && sCol >= 0 && sRow >= 0 && board[sRow][sCol] == player; i++, sRow--, sCol--, count++) ;
+
+        if (count >= 4)
+            return true;
+        return false;
 
     }
+
 
 }
