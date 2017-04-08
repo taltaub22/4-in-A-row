@@ -4,7 +4,6 @@
 public class LogicalBoard implements Players {
 
     private PLAYERS[][] board;
-    public static int turn;
 
     public LogicalBoard() {
         initBoard();
@@ -42,15 +41,9 @@ public class LogicalBoard implements Players {
             throw new ColumnFullException();
         }
 
-        turn++;
-        PLAYERS winner = PLAYERS.NONE;
-
         int i = 5;
         for (; i >= 0 && board[i][col] != PLAYERS.NONE; i--) ;
         board[i][col] = player;
-
-        if (turn / 2 >= 4)
-            winner = checkWin(col, i, player);
 
         return i;
     }
@@ -58,12 +51,12 @@ public class LogicalBoard implements Players {
 
     public PLAYERS checkWin(int col, int row, PLAYERS player) {
 
-        boolean flag = true;
+        boolean flag = false;
 
-        flag = flag && checkWinCol(col, row, player);
-        flag = flag && checkWinRow(col, row, player);
-        flag = flag && checkWinMainDiagonal(col, row, player);
-        flag = flag && checkWinSecondaryDiagonal(col, row, player);
+        flag = flag || checkWinCol(col, row, player);
+        flag = flag || checkWinRow(col, row, player);
+        flag = flag || checkWinMainDiagonal(col, row, player);
+        flag = flag || checkWinSecondaryDiagonal(col, row, player);
 
         if (flag)
             return player;

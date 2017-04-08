@@ -9,7 +9,8 @@ import java.awt.event.ActionListener;
 public class Game extends JFrame implements Players {
 
     private Board board;
-    private static PLAYERS currentPlayer = PLAYERS.PLAYER1;
+    private PLAYERS currentPlayer = PLAYERS.PLAYER1;
+    private int turn = 0;
 
     public Game() {
         board = new Board();
@@ -20,14 +21,14 @@ public class Game extends JFrame implements Players {
         Toolkit tk = Toolkit.getDefaultToolkit();
         Dimension d = tk.getScreenSize();
         setLocation(((int) (d.getWidth() / 2 - this.getWidth() / 2)), ((int) (d.getHeight() / 2 - this.getHeight() / 2)));
-        System.out.println(this.getWidth() + "," + this.getHeight());
+
+        JPanel buttonPanel = new JPanel();
+        JPanel textPanel = new JPanel();
+
+        JLabel curPlayer = new JLabel();
+        textPanel.add(curPlayer);
 
         JButton buttons[] = new JButton[7];
-        JLabel curPlayer = new JLabel();
-        JPanel buttonPanel = new JPanel();
-        //  buttonPanel.add(curPlayer);
-
-
         for (int i = 0; i < buttons.length; i++) {
             int x = i;
             buttons[i] = new JButton("Column " + (i + 1));
@@ -36,9 +37,22 @@ public class Game extends JFrame implements Players {
             buttons[i].addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    Boolean flag = false;
-                    flag = board.insertChecker(x, currentPlayer);
-                    if (flag) {
+                    int row = -1;
+                    row = board.insertChecker(x, currentPlayer);
+                    if (row != -1) {
+                        if (board.checkWin(x, row, currentPlayer) != PLAYERS.NONE) {
+                            int choice = JOptionPane.showConfirmDialog(Game.super.rootPane, currentPlayer + "is the Winner. \n Do you want to start a new game?", "We Have A Winner!", JOptionPane.YES_NO_OPTION);
+                            if (choice == 1) {
+                                setVisible(false);
+                                dispose();
+                            }
+                            if (choice == 0) {
+                                new Game();
+                                setVisible(false);
+                                dispose();
+                            }
+                        }
+                        turn++;
                         currentPlayer = (currentPlayer == PLAYERS.PLAYER1) ? PLAYERS.PLAYER2 : PLAYERS.PLAYER1;
                         curPlayer.setText("Current Player is:" + currentPlayer);
                     }
@@ -46,11 +60,11 @@ public class Game extends JFrame implements Players {
                 }
             });
         }
+
+        add(textPanel, BorderLayout.NORTH);
         add(buttonPanel, BorderLayout.NORTH);
         add(board.getGb(), BorderLayout.CENTER);
 
-
     }
-
 
 }
