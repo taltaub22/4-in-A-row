@@ -1,7 +1,7 @@
 /**
  * Created by Tal Taub on 19/02/2017.
  */
-public class LogicalBoard implements Players {
+public class LogicalBoard implements Consts {
 
     private PLAYERS[][] board;
 

@@ -30,16 +30,16 @@ public class GraphicalBoard extends JPanel {
         int height = this.getHeight() / 6;
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 7; j++) {
-                board[i][j] = new GraphicalChecker(Players.PLAYERS.NONE);
+                board[i][j] = new GraphicalChecker(Consts.PLAYERS.NONE);
 //                board[i][j].setLocation(width/2 - 137/2, height/2 - 137/2);
                 add(board[i][j]);
             }
         }
     }
 
-    public void insertChecker(int col, Players.PLAYERS player) {
+    public void insertChecker(int col, Consts.PLAYERS player) {
         int i = 5;
-        for (; i >= 0 && board[i][col].getPlayer() != Players.PLAYERS.NONE; i--) ;
+        for (; i >= 0 && board[i][col].getPlayer() != Consts.PLAYERS.NONE; i--) ;
         board[i][col].setPlayer(player);
     }
 }

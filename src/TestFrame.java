@@ -1,8 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.jar.JarEntry;
 
 /**
  * Created by Tal Taub on 12/02/2017.
@@ -19,9 +16,9 @@ public class TestFrame extends JFrame {
         setLocation(((int) (d.getWidth() / 2 - this.getWidth() / 2)), ((int) (d.getHeight() / 2 - this.getHeight() / 2)));
         System.out.println(this.getWidth() + "," + this.getHeight());
 
-        GraphicalChecker gc = new GraphicalChecker(Players.PLAYERS.NONE);
+        GraphicalChecker gc = new GraphicalChecker(Consts.PLAYERS.NONE);
         add(gc);
-        gc.setPlayer(Players.PLAYERS.PLAYER2);
+        gc.setPlayer(Consts.PLAYERS.PLAYER2);
         setVisible(true);
 
 
@@ -42,7 +39,7 @@ public class TestFrame extends JFrame {
             e.printStackTrace();
         }
 
-        gc.setPlayer(Players.PLAYERS.PLAYER1);
+        gc.setPlayer(Consts.PLAYERS.PLAYER1);
 
 
 

@@ -30,7 +30,7 @@ public class Board {
         this.lb = lb;
     }
 
-    public int insertChecker(int col, Players.PLAYERS player) {
+    public int insertChecker(int col, Consts.PLAYERS player) {
         int row = -1;
         try {
             row = lb.insertChecker(col, player);
@@ -43,7 +43,7 @@ public class Board {
         return row;
     }
 
-    public Players.PLAYERS checkWin(int col, int row, Players.PLAYERS player) {
+    public Consts.PLAYERS checkWin(int col, int row, Consts.PLAYERS player) {
         return lb.checkWin(col, row, player);
     }
 

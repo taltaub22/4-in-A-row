@@ -27,8 +27,8 @@ public class Menu extends JFrame {
         buttons.setPreferredSize(new Dimension(500, 500));
         buttons.setLocation(1036 / 2, (912 + 90) / 2);
 
-        JButton newGame = new JButton("Start New Game");
-        newGame.addActionListener(new ActionListener() {
+        JButton newGame1v1 = new JButton("Start New 1v1 Game");
+        newGame1v1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setVisible(false);
@@ -46,7 +46,7 @@ public class Menu extends JFrame {
             }
         });
 
-        buttons.add(newGame);
+        buttons.add(newGame1v1);
         buttons.add(exit);
 
         imageTitle.add(image);

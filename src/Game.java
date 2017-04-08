@@ -6,7 +6,7 @@ import java.awt.event.ActionListener;
 /**
  * Created by Tal Taub on 19/02/2017.
  */
-public class Game extends JFrame implements Players {
+public class Game extends JFrame implements Consts {
 
     private Board board;
     private PLAYERS currentPlayer = PLAYERS.PLAYER1;

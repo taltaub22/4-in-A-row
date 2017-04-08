@@ -1,5 +1,3 @@
-import javafx.geometry.Pos;
-
 import javax.swing.*;
 import java.awt.*;
 
@@ -8,10 +6,10 @@ import java.awt.*;
  */
 public class GraphicalChecker extends JLabel {
 
-    private Players.PLAYERS player;
+    private Consts.PLAYERS player;
     private Point location;
 
-    public GraphicalChecker(Players.PLAYERS player) {
+    public GraphicalChecker(Consts.PLAYERS player) {
         this.player = player;
         location = new Point(0, 0);
         setVisible(true);
@@ -25,11 +23,11 @@ public class GraphicalChecker extends JLabel {
         g.drawImage(checker.getImage(), location.x, location.y, null);
     }
 
-    public Players.PLAYERS getPlayer() {
+    public Consts.PLAYERS getPlayer() {
         return player;
     }
 
-    public void setPlayer(Players.PLAYERS player) {
+    public void setPlayer(Consts.PLAYERS player) {
         this.player = player;
         repaint();
     }
