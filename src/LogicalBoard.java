@@ -1,5 +1,3 @@
-import javafx.scene.control.TableCell;
-
 /**
  * Created by Tal Taub on 19/02/2017.
  */
@@ -54,20 +52,23 @@ public class LogicalBoard implements Players {
         if (turn / 2 >= 4)
             winner = checkWin(col, i, player);
 
-        //if(winner != PLAYERS.NONE)
-            //TODO: handle winner & end game
-
         return i;
     }
 
 
     public PLAYERS checkWin(int col, int row, PLAYERS player) {
 
-        checkWinCol(col, row, player);
-        checkWinRow(col, row, player);
-        System.out.println("Wind main diagonal? " + player + " " + checkWinMainDiagonal(col, row, player));
+        boolean flag = true;
 
-        return player;
+        flag = flag && checkWinCol(col, row, player);
+        flag = flag && checkWinRow(col, row, player);
+        flag = flag && checkWinMainDiagonal(col, row, player);
+        flag = flag && checkWinSecondaryDiagonal(col, row, player);
+
+        if (flag)
+            return player;
+        else
+            return PLAYERS.NONE;
     }
 
     public boolean checkWinCol(int col, int row, PLAYERS player) {
@@ -99,13 +100,32 @@ public class LogicalBoard implements Players {
 
         int sCol = col, sRow = row;
 
-        for (int i = 0; i < 3 && sCol < 6 && sRow < 5 && board[sRow][sCol] == player; i++, sRow++, sCol++, count++) ;
-        sCol = col;
-        sRow = row;
-        for (int i = 0; i < 3 && sCol >= 0 && sRow >= 0 && board[sRow][sCol] == player; i++, sRow--, sCol--, count++) ;
+        for (int i = 0; i < 4 && sCol <= 6 && sRow <= 5 && board[sRow][sCol] == player; i++, sRow++, sCol++, count++) ;
+        sCol = col - 1;
+        sRow = row - 1;
+        for (int i = 0; i < 4 && sCol >= 0 && sRow >= 0 && board[sRow][sCol] == player; i++, sRow--, sCol--, count++) ;
 
         if (count >= 4)
             return true;
+
+        return false;
+
+    }
+
+    public boolean checkWinSecondaryDiagonal(int col, int row, PLAYERS player) {
+
+        int count = 0;
+
+        int sCol = col, sRow = row;
+
+        for (int i = 0; i < 4 && sCol >= 0 && sRow <= 5 && board[sRow][sCol] == player; i++, sRow++, sCol--, count++) ;
+        sCol = col + 1;
+        sRow = row - 1;
+        for (int i = 0; i < 4 && sCol <= 6 && sRow >= 0 && board[sRow][sCol] == player; i++, sRow--, sCol++, count++) ;
+
+        if (count >= 4)
+            return true;
+
         return false;
 
     }
