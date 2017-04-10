@@ -4,7 +4,6 @@
 public interface Consts {
 
     enum PLAYERS {NONE, PLAYER1, PLAYER2}
-
     enum GAMETYPES {PVP, PVPC}
 
 }

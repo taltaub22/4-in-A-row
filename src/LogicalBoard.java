@@ -77,10 +77,12 @@ public class LogicalBoard implements Consts {
 
     public boolean checkWinRow(int col, int row, PLAYERS player) {
         int count = 0;
-        int checkRight = col + (4 - 1) >= 6 ? 6 : col + (4 - 1);
-        int checkLeft = col - (4 - 1) <= 0 ? 0 : col - (4 - 1);
+        int checkRight = (col + (4 - 1)) >= 6 ? 6 : col + (4 - 1);
+        int checkLeft = (col - (4 - 1)) <= 0 ? 0 : col - (4 - 1);
 
-        for (int i = checkLeft; i < checkRight && board[row][i] == player && count < 4; i++, count++) ;
+        //TODO: Search each side on its own because if there is an empty cell it stops checking
+
+        for (int i = checkLeft; i < checkRight && board[row][i] == player && count <= 4; i++, count++) ;
         if (count >= 4)
             return true;
 

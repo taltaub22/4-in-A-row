@@ -67,4 +67,8 @@ public class Game extends JFrame implements Consts {
 
     }
 
+//    public void pcAi(){
+//        Random rnd
+//    }
+
 }
