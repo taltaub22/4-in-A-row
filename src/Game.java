@@ -2,17 +2,19 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Random;
 
 /**
  * Created by Tal Taub on 19/02/2017.
  */
+
 public class Game extends JFrame implements Consts {
 
     private Board board;
     private PLAYERS currentPlayer = PLAYERS.PLAYER1;
     private int turn = 0;
 
-    public Game() {
+    public Game(GAMETYPES type) {
         board = new Board();
         setVisible(true);
         setSize(1036, 912 + 90);
@@ -29,6 +31,7 @@ public class Game extends JFrame implements Consts {
         textPanel.add(curPlayer);
 
         JButton buttons[] = new JButton[7];
+
         for (int i = 0; i < buttons.length; i++) {
             int x = i;
             buttons[i] = new JButton("Column " + (i + 1));
@@ -37,6 +40,14 @@ public class Game extends JFrame implements Consts {
             buttons[i].addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
+                    turn++;
+
+                    if (type == GAMETYPES.PVP) {
+                        currentPlayer = (currentPlayer == PLAYERS.PLAYER1) ? PLAYERS.PLAYER2 : PLAYERS.PLAYER1;
+                        curPlayer.setText("Current Player is:" + currentPlayer);
+                        System.out.println(currentPlayer);
+                    }
+
                     int row = -1;
                     row = board.insertChecker(x, currentPlayer);
                     if (row != -1) {
@@ -47,28 +58,63 @@ public class Game extends JFrame implements Consts {
                                 dispose();
                             }
                             if (choice == 0) {
-                                new Game();
+                                new Game(type);
                                 setVisible(false);
                                 dispose();
                             }
                         }
-                        turn++;
-                        currentPlayer = (currentPlayer == PLAYERS.PLAYER1) ? PLAYERS.PLAYER2 : PLAYERS.PLAYER1;
-                        curPlayer.setText("Current Player is:" + currentPlayer);
+
+                        if (type == GAMETYPES.PVPC) {
+                            row = computerAI();
+                            if (row != -1) {
+                                if (board.checkWin(x, row, PLAYERS.PLAYER2) != PLAYERS.NONE) {
+                                    int choice = JOptionPane.showConfirmDialog(Game.super.rootPane, "Computer is the Winner. \n Do you want to start a new game?", "We Have A Winner!", JOptionPane.YES_NO_OPTION);
+                                    if (choice == 1) {
+                                        setVisible(false);
+                                        dispose();
+                                    }
+                                    if (choice == 0) {
+                                        new Game(type);
+                                        setVisible(false);
+                                        dispose();
+                                    }
+                                }
+                            }
+                        }
                     }
-                    System.out.println(currentPlayer);
                 }
             });
         }
 
         add(textPanel, BorderLayout.NORTH);
+
         add(buttonPanel, BorderLayout.NORTH);
+
         add(board.getGb(), BorderLayout.CENTER);
 
     }
 
-//    public void pcAi(){
-//        Random rnd
-//    }
+    private int computerAI() {
+        Random rnd = new Random();
+        int row = -1;
+        int col = rnd.nextInt(7);
+
+        boolean flag = true;
+        do {
+            try {
+                row = board.getLb().insertChecker(col, PLAYERS.PLAYER2);
+                board.getGb().insertChecker(col, PLAYERS.PLAYER2);
+            } catch (NotInBoardException e) {
+                e.printStackTrace();
+                continue;
+            } catch (ColumnFullException e) {
+                System.out.println("Choosing another col");
+                continue;
+            }
+            flag = false;
+        } while (flag);
+
+        return row;
+    }
 
 }

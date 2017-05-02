@@ -19,20 +19,28 @@ public class Menu extends JFrame {
         setLocation(((int) (d.getWidth() / 2 - this.getWidth() / 2)), ((int) (d.getHeight() / 2 - this.getHeight() / 2)));
         setTitle("4-In-A-Row");
 
-        JPanel imageTitle = new JPanel();
-        JLabel image = new JLabel(new ImageIcon("/Images/Title.png"));
 
         JPanel buttons = new JPanel();
-        buttons.setLayout(new GridLayout(2, 1));
-        buttons.setPreferredSize(new Dimension(500, 500));
+        buttons.setLayout(new GridLayout(3, 1));
+        buttons.setPreferredSize(new Dimension(150, 500));
         buttons.setLocation(1036 / 2, (912 + 90) / 2);
 
-        JButton newGame1v1 = new JButton("Start New 1v1 Game");
+        JButton newGame1v1 = new JButton("Start New P vs P Game");
         newGame1v1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setVisible(false);
-                new Game();
+                new Game(Consts.GAMETYPES.PVP);
+                dispose();
+            }
+        });
+
+        JButton newGame1vAI = new JButton("Start New P vs PC Game");
+        newGame1vAI.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setVisible(false);
+                new Game(Consts.GAMETYPES.PVPC);
                 dispose();
             }
         });
@@ -47,10 +55,9 @@ public class Menu extends JFrame {
         });
 
         buttons.add(newGame1v1);
+        buttons.add(newGame1vAI);
         buttons.add(exit);
 
-        imageTitle.add(image);
-        add(imageTitle, BorderLayout.NORTH);
         add(buttons, BorderLayout.CENTER);
 
 
