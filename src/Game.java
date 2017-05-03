@@ -2,7 +2,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Random;
 
 /**
  * Created by Tal Taub on 19/02/2017.
@@ -95,9 +94,10 @@ public class Game extends JFrame implements Consts {
     }
 
     private int computerAI() {
-        Random rnd = new Random();
+        AI ai = new AI();
         int row = -1;
-        int col = rnd.nextInt(7);
+        ai.calculateScores(board);
+        int col = ai.getCol();
 
         boolean flag = true;
         do {

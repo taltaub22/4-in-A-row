@@ -4,8 +4,10 @@
 public class LogicalBoard implements Consts {
 
     private PLAYERS[][] board;
+    private int[] height;
 
     public LogicalBoard() {
+        height = new int[]{5, 5, 5, 5, 5, 5};
         initBoard();
     }
 
@@ -41,11 +43,9 @@ public class LogicalBoard implements Consts {
             throw new ColumnFullException();
         }
 
-        int i = 5;
-        for (; i >= 0 && board[i][col] != PLAYERS.NONE; i--) ;
-        board[i][col] = player;
-
-        return i;
+        board[height[col]][col] = player;
+        height[col]--;
+        return height[col];
     }
 
 
