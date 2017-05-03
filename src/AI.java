@@ -30,14 +30,12 @@ public class AI {
     public void calculateScores(Board board) {
 
 
+        //Col
+
+        //Row
 
 
-            //Col
-
-            //Row
-
-
-            //Main Diagonal
+        //Main Diagonal
 
 
         //Secondary Diagonal
@@ -55,18 +53,27 @@ public class AI {
 
         return (int) Math.pow(10, count);
 
-        }
+    }
 
     public int calculateRow(int col, int row) {
-        int count = 0;
-        int checkRight = (col + (4 - 1)) >= 6 ? 6 : col + (4 - 1);
-        int checkLeft = (col - (4 - 1)) <= 0 ? 0 : col - (4 - 1);
 
-        for (int i = col; i >= checkLeft && board.getLb().getBoard()[row][i] == Consts.PLAYERS.PLAYER2 && count <= 4; i--, count++)
-            ;
-        for (int i = col + 1; i <= checkRight && board.getLb().getBoard()[row][i] == Consts.PLAYERS.PLAYER2 && count <= 4; i++, count++)
-            ;
-        return (int) Math.pow(10, count);
+        int markHumen = 0, markComputer = 0;
+        int[] counters = new int[3];
+        counters[0] = counters[1] = counters[2] = 0;
+
+        //Right
+        int i;
+        for (i = 0; i + col < Consts.maxCol && i < Consts.seqLength; i++) {
+            counters[board.getLb().getBoard()[row][col + i].ordinal()]++;
+        }
+
+        if (i == Consts.seqLength) {
+            if (counters[Consts.PLAYERS.PLAYER1.ordinal()] > 0 && counters[Consts.PLAYERS.PLAYER2.ordinal()] == 0)
+                markHumen += (int) Math.pow(10, counters[Consts.PLAYERS.PLAYER1.ordinal()]);
+
+            if (counters[Consts.PLAYERS.PLAYER2.ordinal()] > 0 && counters[Consts.PLAYERS.PLAYER1.ordinal()] == 0)
+                markComputer += (int) Math.pow(10, counters[Consts.PLAYERS.PLAYER2.ordinal()]);
+        }
     }
 
     public int calculateCol(int col, int row) {

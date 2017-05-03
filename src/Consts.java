@@ -8,4 +8,5 @@ public interface Consts {
 
     int maxRow = 6;
     int maxCol = 7;
+    int seqLength = 4;
 }
