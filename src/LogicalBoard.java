@@ -7,7 +7,7 @@ public class LogicalBoard implements Consts {
     private int[] height;
 
     public LogicalBoard() {
-        height = new int[]{5, 5, 5, 5, 5, 5};
+        height = new int[]{5, 5, 5, 5, 5, 5, 5};
         initBoard();
     }
 
@@ -44,6 +44,7 @@ public class LogicalBoard implements Consts {
     * @return The row that checker was inserted to.
     * */
     public int insertChecker(int col, PLAYERS player) throws NotInBoardException, ColumnFullException {
+
         if (col < 0 && col > 6)
             throw new NotInBoardException();
 
@@ -56,6 +57,10 @@ public class LogicalBoard implements Consts {
         return height[col];
     }
 
+    public void undoMove(int col, int row) {
+        board[row][col] = PLAYERS.NONE;
+        height[col]++;
+    }
 
     public PLAYERS checkWin(int col, int row, PLAYERS player) {
 

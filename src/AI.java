@@ -6,7 +6,7 @@ public class AI implements Consts {
     private Board board;
 
     public AI(Board board) {
-        board = board;
+        this.board = board;
     }
 
     public Board getBoard() {
@@ -40,7 +40,7 @@ public class AI implements Consts {
 
         //Right
         int i;
-        for (i = 0; i + col < maxCol && i < seqLength; i++) {
+        for (i = 0; col + i < maxCol && i < seqLength; i++) {
             counters[board.getLb().getBoard()[row][col + i].ordinal()]++;
         }
 
@@ -56,7 +56,7 @@ public class AI implements Consts {
                 if (board.getLb().getBoard()[row][col] == PLAYERS.NONE
                         && col + i < maxCol
                         && board.getLb().getBoard()[row][col + i - 1] == PLAYERS.NONE
-                        && board.getLb().getBoard()[row][col] == PLAYERS.NONE) {
+                        && board.getLb().getBoard()[row][col + i] == PLAYERS.NONE) {
                     markHumen += (int) Math.pow(10, counters[PLAYERS.PLAYER1.ordinal()] + 1);
                 }
 
@@ -65,7 +65,39 @@ public class AI implements Consts {
                 if (board.getLb().getBoard()[row][col] == PLAYERS.NONE
                         && col + i < maxCol
                         && board.getLb().getBoard()[row][col + i - 1] == PLAYERS.NONE
-                        && board.getLb().getBoard()[row][col] == PLAYERS.NONE) {
+                        && board.getLb().getBoard()[row][col + i] == PLAYERS.NONE) {
+                    markComputer += (int) Math.pow(10, counters[PLAYERS.PLAYER2.ordinal()] + 1);
+                }
+
+
+        }
+
+        //Left
+        for (i = counters[0] = counters[1] = counters[2] = 0; col - i >= 0 && i < seqLength; i++) {
+            counters[board.getLb().getBoard()[row][col - i].ordinal()]++;
+        }
+
+        if (i == seqLength) {
+            if (counters[PLAYERS.PLAYER1.ordinal()] > 0 && counters[PLAYERS.PLAYER2.ordinal()] == 0)
+                markHumen += (int) Math.pow(10, counters[PLAYERS.PLAYER1.ordinal()]);
+
+            if (counters[PLAYERS.PLAYER2.ordinal()] > 0 && counters[PLAYERS.PLAYER1.ordinal()] == 0)
+                markComputer += (int) Math.pow(10, counters[PLAYERS.PLAYER2.ordinal()]);
+
+            //__HH_
+            if (counters[PLAYERS.PLAYER1.ordinal()] == seqLength - 2)
+                if (board.getLb().getBoard()[row][col] == PLAYERS.NONE
+                        && col - i >= 0
+                        && board.getLb().getBoard()[row][col - i + 1] == PLAYERS.NONE
+                        && board.getLb().getBoard()[row][col - i] == PLAYERS.NONE) {
+                    markHumen += (int) Math.pow(10, counters[PLAYERS.PLAYER1.ordinal()] + 1);
+                }
+            //__CC_
+            if (counters[PLAYERS.PLAYER2.ordinal()] == seqLength - 2)
+                if (board.getLb().getBoard()[row][col] == PLAYERS.NONE
+                        && col - i >= 0
+                        && board.getLb().getBoard()[row][col - i + 1] == PLAYERS.NONE
+                        && board.getLb().getBoard()[row][col - i] == PLAYERS.NONE) {
                     markComputer += (int) Math.pow(10, counters[PLAYERS.PLAYER2.ordinal()] + 1);
                 }
 
@@ -105,7 +137,7 @@ public class AI implements Consts {
 
         int i;
         for (i = 0; row - i >= 0 && col - i >= 0 && i < seqLength; i++) {
-            counters[board.getLb().getBoard()[row - i][col].ordinal()]++;
+            counters[board.getLb().getBoard()[row - i][col - i].ordinal()]++;
         }
 
         if (i == seqLength) {
@@ -127,7 +159,7 @@ public class AI implements Consts {
 
         int i;
         for (i = 0; row - i >= 0 && col + i < maxCol && i < seqLength; i++) {
-            counters[board.getLb().getBoard()[row - i][col].ordinal()]++;
+            counters[board.getLb().getBoard()[row - i][col + i].ordinal()]++;
         }
 
         if (i == seqLength) {

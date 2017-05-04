@@ -12,6 +12,7 @@ public class Game extends JFrame implements Consts {
     private Board board;
     private PLAYERS currentPlayer = PLAYERS.PLAYER1;
     private int turn = 0;
+    private AI computer;
 
     public Game(GAMETYPES type) {
         board = new Board();
@@ -30,6 +31,10 @@ public class Game extends JFrame implements Consts {
         textPanel.add(curPlayer);
 
         JButton buttons[] = new JButton[7];
+
+        if (type == GAMETYPES.PVPC) {
+            computer = new AI(board);
+        }
 
         for (int i = 0; i < buttons.length; i++) {
             int x = i;
@@ -57,13 +62,14 @@ public class Game extends JFrame implements Consts {
                                 dispose();
                             }
                             if (choice == 0) {
-                                new Game(type);
+                                new Menu();
                                 setVisible(false);
                                 dispose();
                             }
                         }
 
                         if (type == GAMETYPES.PVPC) {
+                            computerAI();
                         }
                     }
                 }
@@ -76,28 +82,49 @@ public class Game extends JFrame implements Consts {
 
     }
 
-    private int computerAI() {
-        AI ai = new AI();
-        int row = -1;
-        ai.calculateScores(board);
-        int col = ai.getCol();
+    private void computerAI() {
 
-        boolean flag = true;
-        do {
+        int bestCol = 4;
+        int mark;
+        int maxMark = Integer.MIN_VALUE;
+
+        for (int i = 0; i < maxCol; i++) {
+
             try {
-                row = board.getLb().insertChecker(col, PLAYERS.PLAYER2);
-                board.getGb().insertChecker(col, PLAYERS.PLAYER2);
+                board.getLb().insertChecker(i, PLAYERS.PLAYER2);
             } catch (NotInBoardException e) {
                 e.printStackTrace();
-                continue;
             } catch (ColumnFullException e) {
-                System.out.println("Choosing another col");
                 continue;
             }
-            flag = false;
-        } while (flag);
+            mark = computer.calculateScores();
 
-        return row;
+            if (mark > maxMark) {
+                maxMark = mark;
+                bestCol = i;
+            }
+
+            // If this move can win, DO THE MOVE!
+            if (board.checkWin(i, board.getLb().getHeight()[i], PLAYERS.PLAYER2) == PLAYERS.PLAYER2) {
+                board.getGb().insertChecker(i, PLAYERS.PLAYER2);
+                int choice = JOptionPane.showConfirmDialog(Game.super.rootPane, currentPlayer + "is the Winner. \n Do you want to start a new game?", "We Have A Winner!", JOptionPane.YES_NO_OPTION);
+                if (choice == 1) {
+                    setVisible(false);
+                    dispose();
+                    return;
+                }
+                if (choice == 0) {
+                    new Menu();
+                    setVisible(false);
+                    dispose();
+                    return;
+                }
+            } else {
+                board.getLb().undoMove(i, board.getLb().getHeight()[i]);
+            }
+        }
+
+        board.insertChecker(bestCol, PLAYERS.PLAYER2);
     }
 
 }
