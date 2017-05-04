@@ -19,6 +19,14 @@ public class LogicalBoard implements Consts {
         this.board = board;
     }
 
+    public int[] getHeight() {
+        return height;
+    }
+
+    public void setHeight(int[] height) {
+        this.height = height;
+    }
+
     private void initBoard() {
         board = new PLAYERS[6][7];
         for (int i = 0; i < board.length; i++) {

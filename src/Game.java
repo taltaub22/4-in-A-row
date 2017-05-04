@@ -64,21 +64,6 @@ public class Game extends JFrame implements Consts {
                         }
 
                         if (type == GAMETYPES.PVPC) {
-                            row = computerAI();
-                            if (row != -1) {
-                                if (board.checkWin(x, row, PLAYERS.PLAYER2) != PLAYERS.NONE) {
-                                    int choice = JOptionPane.showConfirmDialog(Game.super.rootPane, "Computer is the Winner. \n Do you want to start a new game?", "We Have A Winner!", JOptionPane.YES_NO_OPTION);
-                                    if (choice == 1) {
-                                        setVisible(false);
-                                        dispose();
-                                    }
-                                    if (choice == 0) {
-                                        new Game(type);
-                                        setVisible(false);
-                                        dispose();
-                                    }
-                                }
-                            }
                         }
                     }
                 }
@@ -86,9 +71,7 @@ public class Game extends JFrame implements Consts {
         }
 
         add(textPanel, BorderLayout.NORTH);
-
         add(buttonPanel, BorderLayout.NORTH);
-
         add(board.getGb(), BorderLayout.CENTER);
 
     }

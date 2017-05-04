@@ -1,14 +1,12 @@
 /**
  * Created by Tal Taub on 02/05/2017.
  */
-public class AI {
+public class AI implements Consts {
 
     private Board board;
-    private int[] scores;
 
     public AI(Board board) {
         board = board;
-        scores = new int[7];
     }
 
     public Board getBoard() {
@@ -19,39 +17,18 @@ public class AI {
         this.board = board;
     }
 
-    public int[] getScores() {
-        return scores;
-    }
+    public int calculateScores() {
+        int grade = 0;
 
-    public void setScores(int[] scores) {
-        this.scores = scores;
-    }
+        for (int col = 0; col < maxCol; col++) {
+            int row = board.getLb().getHeight()[col];
+            grade += calculateRow(col, row);
+            grade += calculateCol(col, row);
+            grade += calculateMainDiagonal(col, row);
+            grade += calculateSeconderyDiagonal(col, row);
+        }
 
-    public void calculateScores(Board board) {
-
-
-        //Col
-
-        //Row
-
-
-        //Main Diagonal
-
-
-        //Secondary Diagonal
-        count = 0;
-
-        sCol = col;
-        sRow = row;
-
-        for (int i = 0; i < 4 && sCol >= 0 && sRow <= 5 && testBoard[sRow][sCol] == Consts.PLAYERS.PLAYER2; i++, sRow++, sCol--, count++)
-            ;
-        sCol = col + 1;
-        sRow = row - 1;
-        for (int i = 0; i < 4 && sCol <= 6 && sRow >= 0 && testBoard[sRow][sCol] == Consts.PLAYERS.PLAYER2; i++, sRow--, sCol++, count++)
-            ;
-
-        return (int) Math.pow(10, count);
+        return grade;
 
     }
 
@@ -63,70 +40,108 @@ public class AI {
 
         //Right
         int i;
-        for (i = 0; i + col < Consts.maxCol && i < Consts.seqLength; i++) {
+        for (i = 0; i + col < maxCol && i < seqLength; i++) {
             counters[board.getLb().getBoard()[row][col + i].ordinal()]++;
         }
 
-        if (i == Consts.seqLength) {
-            if (counters[Consts.PLAYERS.PLAYER1.ordinal()] > 0 && counters[Consts.PLAYERS.PLAYER2.ordinal()] == 0)
-                markHumen += (int) Math.pow(10, counters[Consts.PLAYERS.PLAYER1.ordinal()]);
+        if (i == seqLength) {
+            if (counters[PLAYERS.PLAYER1.ordinal()] > 0 && counters[PLAYERS.PLAYER2.ordinal()] == 0)
+                markHumen += (int) Math.pow(10, counters[PLAYERS.PLAYER1.ordinal()]);
 
-            if (counters[Consts.PLAYERS.PLAYER2.ordinal()] > 0 && counters[Consts.PLAYERS.PLAYER1.ordinal()] == 0)
-                markComputer += (int) Math.pow(10, counters[Consts.PLAYERS.PLAYER2.ordinal()]);
+            if (counters[PLAYERS.PLAYER2.ordinal()] > 0 && counters[PLAYERS.PLAYER1.ordinal()] == 0)
+                markComputer += (int) Math.pow(10, counters[PLAYERS.PLAYER2.ordinal()]);
+
+            //_HH___
+            if (counters[PLAYERS.PLAYER1.ordinal()] == seqLength - 2)
+                if (board.getLb().getBoard()[row][col] == PLAYERS.NONE
+                        && col + i < maxCol
+                        && board.getLb().getBoard()[row][col + i - 1] == PLAYERS.NONE
+                        && board.getLb().getBoard()[row][col] == PLAYERS.NONE) {
+                    markHumen += (int) Math.pow(10, counters[PLAYERS.PLAYER1.ordinal()] + 1);
+                }
+
+            //_CC___
+            if (counters[PLAYERS.PLAYER2.ordinal()] == seqLength - 2)
+                if (board.getLb().getBoard()[row][col] == PLAYERS.NONE
+                        && col + i < maxCol
+                        && board.getLb().getBoard()[row][col + i - 1] == PLAYERS.NONE
+                        && board.getLb().getBoard()[row][col] == PLAYERS.NONE) {
+                    markComputer += (int) Math.pow(10, counters[PLAYERS.PLAYER2.ordinal()] + 1);
+                }
+
         }
+
+
+        return markComputer - markHumen;
     }
 
     public int calculateCol(int col, int row) {
-        int count = 0;
-        for (int i = 5; i >= row && board.getLb().getBoard()[i][col] == Consts.PLAYERS.PLAYER2 && count < 4; i--, count++)
-            ;
-        return (int) Math.pow(10, count);
+        int markHumen = 0, markComputer = 0;
+        int[] counters = new int[3];
+        counters[0] = counters[1] = counters[2] = 0;
+
+        int i;
+        for (i = 0; row - i >= 0 && i < seqLength; i++) {
+            counters[board.getLb().getBoard()[row - i][col].ordinal()]++;
+        }
+
+        if (i == seqLength) {
+            if (counters[PLAYERS.PLAYER1.ordinal()] > 0 && counters[PLAYERS.PLAYER2.ordinal()] == 0)
+                markHumen += (int) Math.pow(10, counters[PLAYERS.PLAYER1.ordinal()]);
+
+            if (counters[PLAYERS.PLAYER2.ordinal()] > 0 && counters[PLAYERS.PLAYER1.ordinal()] == 0)
+                markComputer += (int) Math.pow(10, counters[PLAYERS.PLAYER2.ordinal()]);
+        }
+
+        return (markComputer - markHumen);
+
     }
 
     public int calculateMainDiagonal(int col, int row) {
-        int count = 0;
 
-        int sCol = col, sRow = row;
+        int markHumen = 0, markComputer = 0;
+        int[] counters = new int[3];
+        counters[0] = counters[1] = counters[2] = 0;
 
-        for (int i = 0; i < 4 && sCol <= 6 && sRow <= 5 && board.getLb().getBoard()[sRow][sCol] == Consts.PLAYERS.PLAYER2; i++, sRow++, sCol++, count++)
-            ;
-        sCol = col - 1;
-        sRow = row - 1;
-        for (int i = 0; i < 4 && sCol >= 0 && sRow >= 0 && board.getLb().getBoard()[sRow][sCol] == Consts.PLAYERS.PLAYER2; i++, sRow--, sCol--, count++)
-            ;
+        int i;
+        for (i = 0; row - i >= 0 && col - i >= 0 && i < seqLength; i++) {
+            counters[board.getLb().getBoard()[row - i][col].ordinal()]++;
+        }
 
-        return (int) Math.pow(10, count);
+        if (i == seqLength) {
+            if (counters[PLAYERS.PLAYER1.ordinal()] > 0 && counters[PLAYERS.PLAYER2.ordinal()] == 0)
+                markHumen += (int) Math.pow(10, counters[PLAYERS.PLAYER1.ordinal()]);
+
+            if (counters[PLAYERS.PLAYER2.ordinal()] > 0 && counters[PLAYERS.PLAYER1.ordinal()] == 0)
+                markComputer += (int) Math.pow(10, counters[PLAYERS.PLAYER2.ordinal()]);
+        }
+
+        return (markComputer - markHumen);
     }
 
     public int calculateSeconderyDiagonal(int col, int row) {
-        int count = 0;
 
-        int sCol = col;
-        int sRow = row;
+        int markHumen = 0, markComputer = 0;
+        int[] counters = new int[3];
+        counters[0] = counters[1] = counters[2] = 0;
 
-        for (int i = 0; i < 4 && sCol >= 0 && sRow <= 5 && board.getLb().getBoard()[sRow][sCol] == Consts.PLAYERS.PLAYER2; i++, sRow++, sCol--, count++)
-            ;
-        sCol = col + 1;
-        sRow = row - 1;
-        for (int i = 0; i < 4 && sCol <= 6 && sRow >= 0 && board.getLb().getBoard()[sRow][sCol] == Consts.PLAYERS.PLAYER2; i++, sRow--, sCol++, count++)
-            ;
-
-        return (int) Math.pow(10, count);
-    }
-
-
-    public int getCol() {
-
-        int col = 3;
-        int max = Integer.MIN_VALUE;
-        for (int i = 0; i < scores.length; i++) {
-            if (max < scores[i]) {
-                max = scores[i];
-                col = i;
-            }
+        int i;
+        for (i = 0; row - i >= 0 && col + i < maxCol && i < seqLength; i++) {
+            counters[board.getLb().getBoard()[row - i][col].ordinal()]++;
         }
 
-        return col;
+        if (i == seqLength) {
+            if (counters[PLAYERS.PLAYER1.ordinal()] > 0 && counters[PLAYERS.PLAYER2.ordinal()] == 0)
+                markHumen += (int) Math.pow(10, counters[PLAYERS.PLAYER1.ordinal()]);
+
+            if (counters[PLAYERS.PLAYER2.ordinal()] > 0 && counters[PLAYERS.PLAYER1.ordinal()] == 0)
+                markComputer += (int) Math.pow(10, counters[PLAYERS.PLAYER2.ordinal()]);
+        }
+
+        return (markComputer - markHumen);
+
+
     }
+
 
 }
