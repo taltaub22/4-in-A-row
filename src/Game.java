@@ -36,6 +36,7 @@ public class Game extends JFrame implements Consts {
             computer = new AI(board);
         }
 
+
         for (int i = 0; i < buttons.length; i++) {
             int x = i;
             buttons[i] = new JButton("Column " + (i + 1));
@@ -44,13 +45,15 @@ public class Game extends JFrame implements Consts {
             buttons[i].addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    turn++;
 
-                    if (type == GAMETYPES.PVP) {
-                        currentPlayer = (currentPlayer == PLAYERS.PLAYER1) ? PLAYERS.PLAYER2 : PLAYERS.PLAYER1;
-                        curPlayer.setText("Current Player is:" + currentPlayer);
-                        System.out.println(currentPlayer);
+                    if (turn % 2 == 0) {
+                        currentPlayer = PLAYERS.PLAYER1;
+                    } else if (turn % 2 == 1) {
+                        currentPlayer = PLAYERS.PLAYER2;
                     }
+
+                    curPlayer.setText("Current Player is:" + currentPlayer);
+                    System.out.println(currentPlayer);
 
                     int row = -1;
                     row = board.insertChecker(x, currentPlayer);
@@ -69,15 +72,44 @@ public class Game extends JFrame implements Consts {
                         }
 
                         if (type == GAMETYPES.PVPC) {
-                            computerAI();
+                            for (int j = 0; j < 7; j++) {
+                                buttons[j].setEnabled(false);
+                            }
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        Thread.sleep(1500);
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    }
+
+                                    computerAI();
+                                    turn++;
+                                    try {
+                                        Thread.sleep(200);
+                                    } catch (InterruptedException e1) {
+                                        e1.printStackTrace();
+                                    }
+
+                                    for (int j = 0; j < 7; j++) {
+                                        buttons[j].setEnabled(true);
+                                    }
+
+                                }
+                            }).start();
+
                         }
                     }
+                    turn++;
                 }
             });
         }
 
         add(textPanel, BorderLayout.NORTH);
+
         add(buttonPanel, BorderLayout.NORTH);
+
         add(board.getGb(), BorderLayout.CENTER);
 
     }
@@ -90,13 +122,7 @@ public class Game extends JFrame implements Consts {
 
         for (int i = 0; i < maxCol; i++) {
 
-            try {
-                board.getLb().insertChecker(i, PLAYERS.PLAYER2);
-            } catch (NotInBoardException e) {
-                e.printStackTrace();
-            } catch (ColumnFullException e) {
-                continue;
-            }
+            board.getLb().getBoard()[board.getLb().getHeight()[i]][i] = PLAYERS.PLAYER2;
             mark = computer.calculateScores();
 
             if (mark > maxMark) {
@@ -106,8 +132,10 @@ public class Game extends JFrame implements Consts {
 
             // If this move can win, DO THE MOVE!
             if (board.checkWin(i, board.getLb().getHeight()[i], PLAYERS.PLAYER2) == PLAYERS.PLAYER2) {
-                board.getGb().insertChecker(i, PLAYERS.PLAYER2);
-                int choice = JOptionPane.showConfirmDialog(Game.super.rootPane, currentPlayer + "is the Winner. \n Do you want to start a new game?", "We Have A Winner!", JOptionPane.YES_NO_OPTION);
+                board.getLb().getBoard()[board.getLb().getHeight()[i]][i] = PLAYERS.NONE;
+                board.insertChecker(i, PLAYERS.PLAYER2);
+
+                int choice = JOptionPane.showConfirmDialog(Game.super.rootPane, "The Computer is the Winner. \n Do you want to start a new game?", "We Have A Winner!", JOptionPane.YES_NO_OPTION);
                 if (choice == 1) {
                     setVisible(false);
                     dispose();
@@ -120,7 +148,7 @@ public class Game extends JFrame implements Consts {
                     return;
                 }
             } else {
-                board.getLb().undoMove(i, board.getLb().getHeight()[i]);
+                board.getLb().getBoard()[board.getLb().getHeight()[i]][i] = PLAYERS.NONE;
             }
         }
 
