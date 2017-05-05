@@ -54,7 +54,7 @@ public class LogicalBoard implements Consts {
 
         board[height[col]][col] = player;
         height[col]--;
-        return height[col];
+        return height[col] + 1;
     }
 
     public void undoMove(int col, int row) {
@@ -62,7 +62,7 @@ public class LogicalBoard implements Consts {
         height[col]++;
     }
 
-    public PLAYERS checkWin(int col, int row, PLAYERS player) {
+    public boolean checkWin(int col, int row, PLAYERS player) {
 
         boolean flag = false;
 
@@ -71,48 +71,50 @@ public class LogicalBoard implements Consts {
         flag = flag || checkWinMainDiagonal(col, row, player);
         flag = flag || checkWinSecondaryDiagonal(col, row, player);
 
-        if (flag)
-            return player;
-        else
-            return PLAYERS.NONE;
+        return flag;
     }
 
     public boolean checkWinCol(int col, int row, PLAYERS player) {
-        int count = 0;
-        if (row <= 2) {
-            int i = 5;
-            for (; i >= row && board[i][col] == player && count < 4; i--, count++) ;
-            if (count >= 4)
-                return true;
-        }
-        return false;
-    }
+        int i, counter = 1;
+        for (i = 1; i < seqLength && row + i < maxRow && board[row + i][col] == player; i++)
+            counter++;
 
-    public boolean checkWinRow(int col, int row, PLAYERS player) {
-        int count = 0;
-        int checkRight = (col + (4 - 1)) >= 6 ? 6 : col + (4 - 1);
-        int checkLeft = (col - (4 - 1)) <= 0 ? 0 : col - (4 - 1);
-
-        for (int i = col; i >= checkLeft && board[row][i] == player && count <= 4; i--, count++) ;
-        for (int i = col + 1; i <= checkRight && board[row][i] == player && count <= 4; i++, count++) ;
-        if (count >= 4)
+        if (counter == seqLength)
             return true;
 
         return false;
     }
 
+    public boolean checkWinRow(int col, int row, PLAYERS player) {
+        int i, counter = 1;
+
+        for (i = 1; i < seqLength && col + i < maxCol && board[row][col + i] == player; i++)
+            counter++;
+
+        for (i = 1; i < seqLength && col - i >= 0 && board[row][col - i] == player; i++)
+            counter++;
+
+        if (counter >= seqLength)
+            return true;
+
+        return false;
+
+    }
+
     public boolean checkWinMainDiagonal(int col, int row, PLAYERS player) {
+        int i, counter = 1;
 
-        int count = 0;
+        for (i = 1; i < seqLength && row + i < maxRow && col + i < maxCol &&
+                board[row + i][col + i] == player; i++)
 
-        int sCol = col, sRow = row;
+            counter++;
 
-        for (int i = 0; i < 4 && sCol <= 6 && sRow <= 5 && board[sRow][sCol] == player; i++, sRow++, sCol++, count++) ;
-        sCol = col - 1;
-        sRow = row - 1;
-        for (int i = 0; i < 4 && sCol >= 0 && sRow >= 0 && board[sRow][sCol] == player; i++, sRow--, sCol--, count++) ;
+        for (i = 1; i < seqLength && row - i >= 0 && col - i >= 0 &&
+                board[row - i][col - i] == player; i++)
 
-        if (count >= 4)
+            counter++;
+
+        if (counter >= seqLength)
             return true;
 
         return false;
@@ -120,21 +122,22 @@ public class LogicalBoard implements Consts {
     }
 
     public boolean checkWinSecondaryDiagonal(int col, int row, PLAYERS player) {
+        int i, counter = 1;
 
-        int count = 0;
+        for (i = 1; i < seqLength && row - i >= 0 && col + i < maxCol &&
+                board[row - i][col + i] == player; i++)
 
-        int sCol = col, sRow = row;
+            counter++;
 
-        for (int i = 0; i < 4 && sCol >= 0 && sRow <= 5 && board[sRow][sCol] == player; i++, sRow++, sCol--, count++) ;
-        sCol = col + 1;
-        sRow = row - 1;
-        for (int i = 0; i < 4 && sCol <= 6 && sRow >= 0 && board[sRow][sCol] == player; i++, sRow--, sCol++, count++) ;
+        for (i = 1; i < seqLength && row + i < maxRow && col - i >= 0 &&
+                board[row + i][col - i] == player; i++)
 
-        if (count >= 4)
+            counter++;
+
+        if (counter >= seqLength)
             return true;
 
         return false;
-
     }
 
 

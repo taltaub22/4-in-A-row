@@ -55,51 +55,46 @@ public class Game extends JFrame implements Consts {
                     curPlayer.setText("Current Player is:" + currentPlayer);
                     System.out.println(currentPlayer);
 
-                    int row = -1;
-                    row = board.insertChecker(x, currentPlayer);
-                    if (row != -1) {
-                        if (board.checkWin(x, row, currentPlayer) != PLAYERS.NONE) {
-                            int choice = JOptionPane.showConfirmDialog(Game.super.rootPane, currentPlayer + "is the Winner. \n Do you want to start a new game?", "We Have A Winner!", JOptionPane.YES_NO_OPTION);
-                            if (choice == 1) {
-                                setVisible(false);
-                                dispose();
-                            }
-                            if (choice == 0) {
-                                new Menu();
-                                setVisible(false);
-                                dispose();
-                            }
+                    int row = board.insertChecker(x, currentPlayer);
+                    if (board.checkWin(x, row, currentPlayer)) {
+                        int choice = JOptionPane.showConfirmDialog(Game.super.rootPane, currentPlayer + "is the Winner. \n Do you want to start a new game?", "We Have A Winner!", JOptionPane.YES_NO_OPTION);
+                        if (choice == 1) {
+                            setVisible(false);
+                            dispose();
                         }
+                        if (choice == 0) {
+                            new Menu();
+                            setVisible(false);
+                            dispose();
+                        }
+                    }
 
-                        if (type == GAMETYPES.PVPC) {
-                            for (int j = 0; j < 7; j++) {
-                                buttons[j].setEnabled(false);
-                            }
-                            new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    try {
-                                        Thread.sleep(1500);
-                                    } catch (InterruptedException e) {
-                                        e.printStackTrace();
-                                    }
-
-                                    computerAI();
-                                    turn++;
-                                    try {
-                                        Thread.sleep(200);
-                                    } catch (InterruptedException e1) {
-                                        e1.printStackTrace();
-                                    }
-
-                                    for (int j = 0; j < 7; j++) {
-                                        buttons[j].setEnabled(true);
-                                    }
-
+                    if (type == GAMETYPES.PVPC) {
+                        for (int j = 0; j < 7; j++) {
+                            buttons[j].setEnabled(false);
+                        }
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    Thread.sleep(1500);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
                                 }
-                            }).start();
 
-                        }
+                                computerAI();
+                                turn++;
+                                try {
+                                    Thread.sleep(200);
+                                } catch (InterruptedException e1) {
+                                    e1.printStackTrace();
+                                }
+
+                                for (int j = 0; j < 7; j++) {
+                                    buttons[j].setEnabled(true);
+                                }
+                            }
+                        }).start();
                     }
                     turn++;
                 }
@@ -131,7 +126,7 @@ public class Game extends JFrame implements Consts {
             }
 
             // If this move can win, DO THE MOVE!
-            if (board.checkWin(i, board.getLb().getHeight()[i], PLAYERS.PLAYER2) == PLAYERS.PLAYER2) {
+            if (board.checkWin(i, board.getLb().getHeight()[i], PLAYERS.PLAYER2)) {
                 board.getLb().getBoard()[board.getLb().getHeight()[i]][i] = PLAYERS.NONE;
                 board.insertChecker(i, PLAYERS.PLAYER2);
 
@@ -150,6 +145,15 @@ public class Game extends JFrame implements Consts {
             } else {
                 board.getLb().getBoard()[board.getLb().getHeight()[i]][i] = PLAYERS.NONE;
             }
+
+            //If can block - BLOCK!
+            board.getLb().getBoard()[board.getLb().getHeight()[i]][i] = PLAYERS.PLAYER1;
+            if (board.checkWin(i, board.getLb().getHeight()[i], PLAYERS.PLAYER1)) {
+                board.getLb().getBoard()[board.getLb().getHeight()[i]][i] = PLAYERS.NONE;
+                board.insertChecker(i, PLAYERS.PLAYER2);
+                return;
+            }
+
         }
 
         board.insertChecker(bestCol, PLAYERS.PLAYER2);

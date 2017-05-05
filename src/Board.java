@@ -3,7 +3,7 @@ import javax.swing.*;
 /**
  * Created by Tal Taub on 19/02/2017.
  */
-public class Board {
+public class Board implements Consts {
 
     private GraphicalBoard gb;
     private LogicalBoard lb;
@@ -43,7 +43,7 @@ public class Board {
         return row;
     }
 
-    public Consts.PLAYERS checkWin(int col, int row, Consts.PLAYERS player) {
+    public boolean checkWin(int col, int row, Consts.PLAYERS player) {
         return lb.checkWin(col, row, player);
     }
 
