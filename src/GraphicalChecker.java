@@ -19,7 +19,7 @@ public class GraphicalChecker extends JLabel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         ImageIcon checker;
-        checker = new ImageIcon("Images/" + player.toString() + ".png");
+        checker = new ImageIcon(this.getClass().getResource("/Images/" + player.toString() + ".png"));
         g.drawImage(checker.getImage(), location.x, location.y, null);
     }
 
