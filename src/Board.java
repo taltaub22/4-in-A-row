@@ -34,7 +34,7 @@ public class Board implements Consts {
         int row = -1;
         try {
             row = lb.insertChecker(col, player);
-            gb.insertChecker(col, player);
+            gb.insertChecker(col, row, player);
         } catch (NotInBoardException e) {
             e.printStackTrace();
         } catch (ColumnFullException e) {

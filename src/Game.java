@@ -17,7 +17,7 @@ public class Game extends JFrame implements Consts {
     public Game(GAMETYPES type) {
         board = new Board();
         setVisible(true);
-        setSize(1036, 912 + 90);
+        setSize(1036, 890 + 90);
         setResizable(false);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         Toolkit tk = Toolkit.getDefaultToolkit();
@@ -56,6 +56,8 @@ public class Game extends JFrame implements Consts {
                     System.out.println(currentPlayer);
 
                     int row = board.insertChecker(x, currentPlayer);
+
+
                     if (board.checkWin(x, row, currentPlayer)) {
                         int choice = JOptionPane.showConfirmDialog(Game.super.rootPane, currentPlayer + "is the Winner. \n Do you want to start a new game?", "We Have A Winner!", JOptionPane.YES_NO_OPTION);
                         if (choice == 1) {
@@ -82,7 +84,14 @@ public class Game extends JFrame implements Consts {
                                     e.printStackTrace();
                                 }
 
-                                computerAI();
+                                /*----------AI: CHANGE HERE---------*/
+
+//                                simpleComputerAI();
+                                negaMaxComputerAI();
+
+                                /*----------------------------------*/
+
+
                                 turn++;
                                 try {
                                     Thread.sleep(200);
@@ -109,7 +118,7 @@ public class Game extends JFrame implements Consts {
 
     }
 
-    private void computerAI() {
+    private void simpleComputerAI() {
 
         int bestCol = 4;
         int mark;
@@ -117,46 +126,98 @@ public class Game extends JFrame implements Consts {
 
         for (int i = 0; i < maxCol; i++) {
 
-            board.getLb().getBoard()[board.getLb().getHeight()[i]][i] = PLAYERS.PLAYER2;
-            mark = computer.calculateScores();
+            if (board.getLb().getHeight()[i] >= 0) {
+                board.getLb().getBoard()[board.getLb().getHeight()[i]][i] = PLAYERS.PLAYER2;
+                mark = computer.calculateScores();
 
-            if (mark > maxMark) {
-                maxMark = mark;
-                bestCol = i;
-            }
-
-            // If this move can win, DO THE MOVE!
-            if (board.checkWin(i, board.getLb().getHeight()[i], PLAYERS.PLAYER2)) {
-                board.getLb().getBoard()[board.getLb().getHeight()[i]][i] = PLAYERS.NONE;
-                board.insertChecker(i, PLAYERS.PLAYER2);
-
-                int choice = JOptionPane.showConfirmDialog(Game.super.rootPane, "The Computer is the Winner. \n Do you want to start a new game?", "We Have A Winner!", JOptionPane.YES_NO_OPTION);
-                if (choice == 1) {
-                    setVisible(false);
-                    dispose();
-                    return;
+                if (mark > maxMark) {
+                    maxMark = mark;
+                    bestCol = i;
                 }
-                if (choice == 0) {
-                    new Menu();
-                    setVisible(false);
-                    dispose();
-                    return;
+
+                // If this move can win, DO THE MOVE!
+                if (board.checkWin(i, board.getLb().getHeight()[i], PLAYERS.PLAYER2)) {
+                    board.getLb().getBoard()[board.getLb().getHeight()[i]][i] = PLAYERS.NONE;
+                    board.insertChecker(i, PLAYERS.PLAYER2);
+
+                    int choice = JOptionPane.showConfirmDialog(Game.super.rootPane, "The Computer is the Winner. \n Do you want to start a new game?", "We Have A Winner!", JOptionPane.YES_NO_OPTION);
+                    if (choice == 1) {
+                        setVisible(false);
+                        dispose();
+                        return;
+                    }
+                    if (choice == 0) {
+                        new Menu();
+                        setVisible(false);
+                        dispose();
+                        return;
+                    }
+                } else {
+                    board.getLb().getBoard()[board.getLb().getHeight()[i]][i] = PLAYERS.NONE;
                 }
-            } else {
-                board.getLb().getBoard()[board.getLb().getHeight()[i]][i] = PLAYERS.NONE;
-            }
 
-            //If can block - BLOCK!
-            board.getLb().getBoard()[board.getLb().getHeight()[i]][i] = PLAYERS.PLAYER1;
-            if (board.checkWin(i, board.getLb().getHeight()[i], PLAYERS.PLAYER1)) {
-                board.getLb().getBoard()[board.getLb().getHeight()[i]][i] = PLAYERS.NONE;
-                board.insertChecker(i, PLAYERS.PLAYER2);
-                return;
+                //If can block - BLOCK!
+                board.getLb().getBoard()[board.getLb().getHeight()[i]][i] = PLAYERS.PLAYER1;
+                if (board.checkWin(i, board.getLb().getHeight()[i], PLAYERS.PLAYER1)) {
+                    board.getLb().getBoard()[board.getLb().getHeight()[i]][i] = PLAYERS.NONE;
+                    board.insertChecker(i, PLAYERS.PLAYER2);
+                    return;
+                } else {
+                    board.getLb().getBoard()[board.getLb().getHeight()[i]][i] = PLAYERS.NONE;
+                }
             }
-
         }
 
         board.insertChecker(bestCol, PLAYERS.PLAYER2);
     }
+
+    private void negaMaxComputerAI() {
+
+        int bestCol = 4;
+        int mark;
+        int maxMark = Integer.MIN_VALUE;
+
+        for (int i = 0; i < maxCol; i++) {
+
+            if (board.getLb().getHeight()[i] >= 0) {
+                board.getLb().getBoard()[board.getLb().getHeight()[i]][i] = PLAYERS.PLAYER2;
+
+                // If this move can win, DO THE MOVE!
+                if (board.checkWin(i, board.getLb().getHeight()[i], PLAYERS.PLAYER2)) {
+                    board.getLb().getBoard()[board.getLb().getHeight()[i]][i] = PLAYERS.NONE;
+                    board.insertChecker(i, PLAYERS.PLAYER2);
+                    int choice = JOptionPane.showConfirmDialog(Game.super.rootPane, "The Computer is the Winner. \n Do you want to start a new game?", "We Have A Winner!", JOptionPane.YES_NO_OPTION);
+                    if (choice == 1) {
+                        setVisible(false);
+                        dispose();
+                        return;
+                    }
+                    if (choice == 0) {
+                        new Menu();
+                        setVisible(false);
+                        dispose();
+                        return;
+                    }
+                } else {
+                    board.getLb().getBoard()[board.getLb().getHeight()[i]][i] = PLAYERS.NONE;
+                }
+
+                //If can block - BLOCK!
+                board.getLb().getBoard()[board.getLb().getHeight()[i]][i] = PLAYERS.PLAYER1;
+                if (board.checkWin(i, board.getLb().getHeight()[i], PLAYERS.PLAYER1)) {
+                    board.getLb().getBoard()[board.getLb().getHeight()[i]][i] = PLAYERS.NONE;
+                    board.insertChecker(i, PLAYERS.PLAYER2);
+                    return;
+                } else {
+                    board.getLb().getBoard()[board.getLb().getHeight()[i]][i] = PLAYERS.NONE;
+                }
+            }
+        }
+
+        computer.negaMax(computer.getDepth(), PLAYERS.PLAYER2);
+        bestCol = computer.getBestCol();
+        board.insertChecker(bestCol, PLAYERS.PLAYER2);
+    }
+
 
 }

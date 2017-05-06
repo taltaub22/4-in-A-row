@@ -4,6 +4,8 @@
 public class AI implements Consts {
 
     private Board board;
+    public int depth = 3;
+    public int bestCol;
 
     public AI(Board board) {
         this.board = board;
@@ -17,15 +19,34 @@ public class AI implements Consts {
         this.board = board;
     }
 
+    public int getDepth() {
+        return depth;
+    }
+
+    public void setDepth(int depth) {
+        this.depth = depth;
+    }
+
+    public int getBestCol() {
+        return bestCol;
+    }
+
+    public void setBestCol(int bestCol) {
+        this.bestCol = bestCol;
+    }
+
     public int calculateScores() {
         int grade = 0;
 
         for (int col = 0; col < maxCol; col++) {
             int row = board.getLb().getHeight()[col];
-            grade += calculateRow(col, row);
-            grade += calculateCol(col, row);
-            grade += calculateMainDiagonal(col, row);
-            grade += calculateSeconderyDiagonal(col, row);
+            //If row is full, skip over it
+            if (board.getLb().getHeight()[col] >= 0) {
+                grade += calculateRow(col, row);
+                grade += calculateCol(col, row);
+                grade += calculateMainDiagonal(col, row);
+                grade += calculateSeconderyDiagonal(col, row);
+            }
         }
 
         return grade;
@@ -175,5 +196,32 @@ public class AI implements Consts {
 
     }
 
+    public int negaMax(int depth, PLAYERS player) {
+        int best = Integer.MIN_VALUE;
+        int val, col;
+
+        if (depth == 0)
+            return -this.calculateScores();
+
+        for (col = 0; col < maxCol; col++) {
+            if (board.getLb().getHeight()[col] >= 0) {
+                board.getLb().getBoard()[board.getLb().getHeight()[col]][col] = player;// Make move
+                board.getLb().getHeight()[col] -= 1;
+                val = -negaMax(depth - 1, (player == PLAYERS.PLAYER1 ? PLAYERS.PLAYER2 : PLAYERS.PLAYER1));
+
+                board.getLb().getHeight()[col] += 1;
+                board.getLb().getBoard()[board.getLb().getHeight()[col]][col] = PLAYERS.NONE;// undo move
+                if (val > best) {
+                    best = val;
+                    // Only keep best move in the first
+                    // game tree level
+                    if (depth == this.depth) {
+                        bestCol = col;
+                    }
+                }
+            }
+        }
+        return (best);
+    }
 
 }
