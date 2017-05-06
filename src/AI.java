@@ -4,7 +4,7 @@
 public class AI implements Consts {
 
     private Board board;
-    public int depth = 3;
+    public int depth = 7;
     public int bestCol;
 
     public AI(Board board) {
