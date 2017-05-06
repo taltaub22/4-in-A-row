@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.util.Stack;
 
 /**
  * Created by Tal Taub on 19/02/2017.
@@ -12,9 +14,11 @@ public class Game extends JFrame implements Consts {
     private Board board;
     private PLAYERS currentPlayer = PLAYERS.PLAYER1;
     private int turn = 0;
+    private Stack<Integer> Moves = new Stack<>();
     private AI computer;
 
     public Game(GAMETYPES type) {
+        /*---------------------------------General Settings-------------------------*/
         board = new Board();
         setVisible(true);
         setSize(1036, 890 + 90);
@@ -25,19 +29,48 @@ public class Game extends JFrame implements Consts {
         setLocation(((int) (d.getWidth() / 2 - this.getWidth() / 2)), ((int) (d.getHeight() / 2 - this.getHeight() / 2)) - 25);
         setTitle("4 In-A-Row " + type);
 
+        /*---------------------------------Menu Bar--------------------------------*/
+        JMenuBar manuBar = new JMenuBar();
+        setJMenuBar(manuBar);
 
+        JMenu file = new JMenu("File");
+        manuBar.add(file);
+
+        if (type != GAMETYPES.PVPC) {
+            JMenuItem undo = new JMenuItem("Undo");
+            file.add(undo);
+            undo.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if (!Moves.empty()) {
+                        turn--;
+                        board.undoMove(Moves.pop());
+                    } else
+                        JOptionPane.showMessageDialog(Game.super.rootPane, "No more moves to undo!");
+                }
+            });
+            undo.setAccelerator(KeyStroke.getKeyStroke(
+                    KeyEvent.VK_Z, ActionEvent.CTRL_MASK));
+        }
+
+        JMenuItem exit = new JMenuItem("Exit");
+        file.add(exit);
+        exit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new Menu();
+                dispose();
+            }
+        });
+
+
+        /*---------------------------------GAME------------------------------------*/
         JPanel buttonPanel = new JPanel();
-        JPanel textPanel = new JPanel();
-
-        JLabel curPlayer = new JLabel();
-        textPanel.add(curPlayer);
-
         JButton buttons[] = new JButton[7];
 
         if (type == GAMETYPES.PVPC) {
             computer = new AI(board);
         }
-
 
         for (int i = 0; i < buttons.length; i++) {
             int x = i;
@@ -54,11 +87,21 @@ public class Game extends JFrame implements Consts {
                         currentPlayer = PLAYERS.PLAYER2;
                     }
 
-                    curPlayer.setText("Current Player is:" + currentPlayer);
                     System.out.println(currentPlayer);
 
-                    int row = board.insertChecker(x, currentPlayer);
+                    if (turn >= maxCol * maxRow)
+                        if (board.isBoardFull()) {
+                            int option = JOptionPane.showConfirmDialog(Game.super.rootPane,
+                                    "The board is full!", "Board is full", JOptionPane.ERROR_MESSAGE);
+                            if (option == JOptionPane.OK_OPTION) {
+                                new Menu();
+                                dispose();
+                            }
+                        }
 
+                    /**************Inserting Checker***************/
+                    int row = board.insertChecker(x, currentPlayer);
+                    Moves.push(x);
 
                     if (board.checkWin(x, row, currentPlayer)) {
                         int choice = JOptionPane.showConfirmDialog(Game.super.rootPane, currentPlayer + "is the Winner. \n Do you want to start a new game?", "We Have A Winner!", JOptionPane.YES_NO_OPTION);
@@ -112,12 +155,9 @@ public class Game extends JFrame implements Consts {
             });
         }
 
-        add(textPanel, BorderLayout.NORTH);
-
         add(buttonPanel, BorderLayout.NORTH);
 
         add(board.getGb(), BorderLayout.CENTER);
-
     }
 
     private void simpleComputerAI() {

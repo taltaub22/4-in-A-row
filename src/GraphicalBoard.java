@@ -16,13 +16,6 @@ public class GraphicalBoard extends JPanel implements Consts {
         setVisible(true);
     }
 
-    /*@Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        ImageIcon ii;
-        ii = new ImageIcon("Images/board.png");
-        g.drawImage(ii.getImage(), -13, -15, null);
-    }*/
 
     private void initBoard() {
         int width = this.getWidth() / 7;
@@ -54,5 +47,10 @@ public class GraphicalBoard extends JPanel implements Consts {
 
         board[i][col].setPlayer(player);
 
+    }
+
+    public void undoMove(int col, int row) {
+        board[row][col].setPlayer(PLAYERS.NONE);
+        repaint(0);
     }
 }

@@ -47,4 +47,17 @@ public class Board implements Consts {
         return lb.checkWin(col, row, player);
     }
 
+    public void undoMove(int col) {
+        int row = getLb().getHeight()[col];
+        lb.undoMove(col, row);
+        gb.undoMove(col, row);
+    }
+
+    public boolean isBoardFull() {
+        for (int i = 0; i < maxCol; i++) {
+            if (lb.getHeight()[i] >= 0)
+                return false;
+        }
+        return true;
+    }
 }
