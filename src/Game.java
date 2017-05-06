@@ -22,7 +22,9 @@ public class Game extends JFrame implements Consts {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         Toolkit tk = Toolkit.getDefaultToolkit();
         Dimension d = tk.getScreenSize();
-        setLocation(((int) (d.getWidth() / 2 - this.getWidth() / 2)), ((int) (d.getHeight() / 2 - this.getHeight() / 2)));
+        setLocation(((int) (d.getWidth() / 2 - this.getWidth() / 2)), ((int) (d.getHeight() / 2 - this.getHeight() / 2)) - 25);
+        setTitle("4 In-A-Row " + type);
+
 
         JPanel buttonPanel = new JPanel();
         JPanel textPanel = new JPanel();
