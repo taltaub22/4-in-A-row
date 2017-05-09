@@ -79,10 +79,8 @@ public class LogicalBoard implements Consts {
         for (i = 1; i < seqLength && row + i < maxRow && board[row + i][col] == player; i++)
             counter++;
 
-        if (counter == seqLength)
-            return true;
+        return counter == seqLength;
 
-        return false;
     }
 
     public boolean checkWinRow(int col, int row, PLAYERS player) {
@@ -94,10 +92,7 @@ public class LogicalBoard implements Consts {
         for (i = 1; i < seqLength && col - i >= 0 && board[row][col - i] == player; i++)
             counter++;
 
-        if (counter >= seqLength)
-            return true;
-
-        return false;
+        return counter >= seqLength;
 
     }
 
@@ -114,10 +109,7 @@ public class LogicalBoard implements Consts {
 
             counter++;
 
-        if (counter >= seqLength)
-            return true;
-
-        return false;
+        return counter >= seqLength;
 
     }
 
@@ -134,10 +126,8 @@ public class LogicalBoard implements Consts {
 
             counter++;
 
-        if (counter >= seqLength)
-            return true;
+        return counter >= seqLength;
 
-        return false;
     }
 
 
