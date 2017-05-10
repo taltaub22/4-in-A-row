@@ -16,7 +16,6 @@ public class GraphicalBoard extends JPanel implements Consts {
         setVisible(true);
     }
 
-
     private void initBoard() {
         int width = this.getWidth() / 7;
         int height = this.getHeight() / 6;

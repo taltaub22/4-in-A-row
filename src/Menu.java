@@ -8,8 +8,7 @@ import java.awt.event.ActionListener;
  */
 public class Menu extends JFrame {
 
-    public Menu() throws HeadlessException {
-
+    public Menu() {
 
         setSize(1036, 720);
         setResizable(false);

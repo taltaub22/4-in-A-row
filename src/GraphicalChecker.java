@@ -4,12 +4,12 @@ import java.awt.*;
 /**
  * Created by Tal Taub on 21/02/2017.
  */
-public class GraphicalChecker extends JLabel {
+public class GraphicalChecker extends JLabel implements Consts {
 
-    private Consts.PLAYERS player;
+    private PLAYERS player;
     private Point location;
 
-    public GraphicalChecker(Consts.PLAYERS player) {
+    public GraphicalChecker(PLAYERS player) {
         this.player = player;
         location = new Point(0, 0);
         setVisible(true);

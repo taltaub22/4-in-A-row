@@ -4,7 +4,7 @@
 public class AI implements Consts {
 
     private Board board;
-    public int depth = 7;
+    public int depth = 3;
     public int bestCol;
 
     public AI(Board board) {
@@ -57,7 +57,7 @@ public class AI implements Consts {
 
         int markHumen = 0, markComputer = 0;
         int[] counters = new int[3];
-        counters[0] = counters[1] = counters[2] = 0;
+        counters[PLAYERS.NONE.ordinal()] = counters[PLAYERS.PLAYER1.ordinal()] = counters[PLAYERS.PLAYER2.ordinal()] = 0;
 
         //Right
         int i;
@@ -131,7 +131,7 @@ public class AI implements Consts {
     public int calculateCol(int col, int row) {
         int markHumen = 0, markComputer = 0;
         int[] counters = new int[3];
-        counters[0] = counters[1] = counters[2] = 0;
+        counters[PLAYERS.NONE.ordinal()] = counters[PLAYERS.PLAYER1.ordinal()] = counters[PLAYERS.PLAYER2.ordinal()] = 0;
 
         int i;
         for (i = 0; row - i >= 0 && i < seqLength; i++) {
@@ -154,8 +154,7 @@ public class AI implements Consts {
 
         int markHumen = 0, markComputer = 0;
         int[] counters = new int[3];
-        counters[0] = counters[1] = counters[2] = 0;
-
+        counters[PLAYERS.NONE.ordinal()] = counters[PLAYERS.PLAYER1.ordinal()] = counters[PLAYERS.PLAYER2.ordinal()] = 0;
         int i;
         for (i = 0; row - i >= 0 && col - i >= 0 && i < seqLength; i++) {
             counters[board.getLb().getBoard()[row - i][col - i].ordinal()]++;
@@ -176,7 +175,7 @@ public class AI implements Consts {
 
         int markHumen = 0, markComputer = 0;
         int[] counters = new int[3];
-        counters[0] = counters[1] = counters[2] = 0;
+        counters[PLAYERS.NONE.ordinal()] = counters[PLAYERS.PLAYER1.ordinal()] = counters[PLAYERS.PLAYER2.ordinal()] = 0;
 
         int i;
         for (i = 0; row - i >= 0 && col + i < maxCol && i < seqLength; i++) {
@@ -206,10 +205,10 @@ public class AI implements Consts {
         for (col = 0; col < maxCol; col++) {
             if (board.getLb().getHeight()[col] >= 0) {
                 board.getLb().getBoard()[board.getLb().getHeight()[col]][col] = player;// Make move
-                board.getLb().getHeight()[col] -= 1;
+                board.getLb().getHeight()[col]--;
                 val = -negaMax(depth - 1, (player == PLAYERS.PLAYER1 ? PLAYERS.PLAYER2 : PLAYERS.PLAYER1));
 
-                board.getLb().getHeight()[col] += 1;
+                board.getLb().getHeight()[col]++;
                 board.getLb().getBoard()[board.getLb().getHeight()[col]][col] = PLAYERS.NONE;// undo move
                 if (val > best) {
                     best = val;

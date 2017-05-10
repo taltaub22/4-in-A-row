@@ -14,7 +14,7 @@ public class Game extends JFrame implements Consts {
     private Board board;
     private PLAYERS currentPlayer = PLAYERS.PLAYER1;
     private int turn = 0;
-    private Stack<Integer> Moves = new Stack<>();
+    private Stack<Integer> moves = new Stack<>();
     private AI computer;
 
     public Game(GAMETYPES type) {
@@ -42,9 +42,9 @@ public class Game extends JFrame implements Consts {
             undo.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    if (!Moves.empty()) {
+                    if (!moves.empty()) {
                         turn--;
-                        board.undoMove(Moves.pop());
+                        board.undoMove(moves.pop());
                     } else
                         JOptionPane.showMessageDialog(Game.super.rootPane, "No more moves to undo!");
                 }
@@ -99,9 +99,9 @@ public class Game extends JFrame implements Consts {
                             }
                         }
 
-                    /**************Inserting Checker***************/
+                    /*************Inserting Checker***************/
                     int row = board.insertChecker(x, currentPlayer);
-                    Moves.push(x);
+                    moves.push(x);
 
                     if (board.checkWin(x, row, currentPlayer)) {
                         int choice = JOptionPane.showConfirmDialog(Game.super.rootPane, currentPlayer + "is the Winner. \n Do you want to start a new game?", "We Have A Winner!", JOptionPane.YES_NO_OPTION);
@@ -214,10 +214,7 @@ public class Game extends JFrame implements Consts {
     }
 
     private void negaMaxComputerAI() {
-
         int bestCol = 4;
-        int mark;
-        int maxMark = Integer.MIN_VALUE;
 
         for (int i = 0; i < maxCol; i++) {
 
@@ -261,5 +258,8 @@ public class Game extends JFrame implements Consts {
         board.insertChecker(bestCol, PLAYERS.PLAYER2);
     }
 
+    private void alphaBetaComputerAI() {
+        //TODO: implement
+    }
 
 }
