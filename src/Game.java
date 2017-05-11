@@ -36,22 +36,62 @@ public class Game extends JFrame implements Consts {
         JMenu file = new JMenu("File");
         manuBar.add(file);
 
-        if (type != GAMETYPES.PVPC) {
-            JMenuItem undo = new JMenuItem("Undo");
-            file.add(undo);
-            undo.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    if (!moves.empty()) {
-                        turn--;
-                        board.undoMove(moves.pop());
-                    } else
-                        JOptionPane.showMessageDialog(Game.super.rootPane, "No more moves to undo!");
-                }
-            });
-            undo.setAccelerator(KeyStroke.getKeyStroke(
-                    KeyEvent.VK_Z, ActionEvent.CTRL_MASK));
-        }
+        //new Game
+        JMenuItem newGame = new JMenuItem("New Game");
+        file.add(newGame);
+        newGame.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new Game(type);
+                dispose();
+            }
+        });
+        newGame.setAccelerator(KeyStroke.getKeyStroke(
+                KeyEvent.VK_N, ActionEvent.CTRL_MASK));
+
+        //Save
+        JMenuItem save = new JMenuItem("Save");
+        file.add(save);
+        save.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                board.save(turn);
+                new Menu();
+                dispose();
+            }
+        });
+        save.setAccelerator(KeyStroke.getKeyStroke(
+                KeyEvent.VK_S, ActionEvent.CTRL_MASK));
+
+        //Load
+        JMenuItem open = new JMenuItem("Open");
+        file.add(open);
+        open.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                turn = board.load();
+            }
+        });
+        open.setAccelerator(KeyStroke.getKeyStroke(
+                KeyEvent.VK_O, ActionEvent.CTRL_MASK));
+
+
+        //Undo
+        JMenuItem undo = new JMenuItem("Undo");
+        file.add(undo);
+        undo.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (!moves.empty()) {
+                    turn--;
+                    board.undoMove(moves.pop());
+                } else
+                    JOptionPane.showMessageDialog(Game.super.rootPane, "No more moves to undo!");
+            }
+        });
+        undo.setAccelerator(KeyStroke.getKeyStroke(
+                KeyEvent.VK_Z, ActionEvent.CTRL_MASK));
+
 
         JMenuItem exit = new JMenuItem("Exit");
         file.add(exit);
@@ -131,8 +171,8 @@ public class Game extends JFrame implements Consts {
 
                                 /*----------AI: CHANGE HERE---------*/
 
-//                                simpleComputerAI();
-                                negaMaxComputerAI();
+                                simpleComputerAI();
+//                                negaMaxComputerAI();
 
                                 /*----------------------------------*/
 
@@ -181,6 +221,7 @@ public class Game extends JFrame implements Consts {
                 if (board.checkWin(i, board.getLb().getHeight()[i], PLAYERS.PLAYER2)) {
                     board.getLb().getBoard()[board.getLb().getHeight()[i]][i] = PLAYERS.NONE;
                     board.insertChecker(i, PLAYERS.PLAYER2);
+                    moves.push(i);
 
                     int choice = JOptionPane.showConfirmDialog(Game.super.rootPane, "The Computer is the Winner. \n Do you want to start a new game?", "We Have A Winner!", JOptionPane.YES_NO_OPTION);
                     if (choice == 1) {
@@ -203,6 +244,7 @@ public class Game extends JFrame implements Consts {
                 if (board.checkWin(i, board.getLb().getHeight()[i], PLAYERS.PLAYER1)) {
                     board.getLb().getBoard()[board.getLb().getHeight()[i]][i] = PLAYERS.NONE;
                     board.insertChecker(i, PLAYERS.PLAYER2);
+                    moves.push(i);
                     return;
                 } else {
                     board.getLb().getBoard()[board.getLb().getHeight()[i]][i] = PLAYERS.NONE;
@@ -211,6 +253,7 @@ public class Game extends JFrame implements Consts {
         }
 
         board.insertChecker(bestCol, PLAYERS.PLAYER2);
+        moves.push(bestCol);
     }
 
     private void negaMaxComputerAI() {

@@ -16,13 +16,27 @@ public class GraphicalBoard extends JPanel implements Consts {
         setVisible(true);
     }
 
+    public GraphicalChecker[][] getBoard() {
+        return board;
+    }
+
+    public void setBoard(GraphicalChecker[][] board) {
+        this.board = board;
+    }
+
     private void initBoard() {
-        int width = this.getWidth() / 7;
-        int height = this.getHeight() / 6;
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 7; j++) {
                 board[i][j] = new GraphicalChecker(Consts.PLAYERS.NONE);
                 add(board[i][j]);
+            }
+        }
+    }
+
+    public void initBoard(PLAYERS[][] board) {
+        for (int i = 0; i < 6; i++) {
+            for (int j = 0; j < 7; j++) {
+                this.board[i][j].setPlayer(board[i][j]);
             }
         }
     }

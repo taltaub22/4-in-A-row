@@ -1,3 +1,6 @@
+import javax.swing.*;
+import java.io.*;
+
 /**
  * Created by Tal Taub on 19/02/2017.
  */
@@ -128,5 +131,50 @@ public class LogicalBoard implements Consts {
 
         return counter >= seqLength;
 
+    }
+
+    public void save(int turn) {
+        try {  // Catch errors in I/O if necessary.
+            JFileChooser c = new JFileChooser();
+            int r = c.showDialog(null, "Create file to save game");
+            if (r == JFileChooser.APPROVE_OPTION) {
+                File f = c.getSelectedFile();
+                FileOutputStream saveFile = new FileOutputStream(f);
+                ObjectOutputStream save = new ObjectOutputStream(saveFile);
+
+                save.writeObject(board);
+                save.writeObject(height);
+                save.writeObject(turn);
+
+                save.close(); // This also closes saveFile.
+            }
+        } catch (Exception exc) {
+            exc.printStackTrace(); // If there was an error, print the info.
+        }
+    }
+
+    public int load() {
+        int turn = 0;
+        try {
+            JFileChooser c = new JFileChooser();
+            int r = c.showDialog(null, "Open file to load game");
+            if (r == JFileChooser.APPROVE_OPTION) {
+                File f = c.getSelectedFile();
+                FileInputStream loadFile = new FileInputStream(f);
+
+                ObjectInputStream load = new ObjectInputStream(loadFile);
+
+                setBoard((PLAYERS[][]) load.readObject());
+                setHeight((int[]) load.readObject());
+                turn = (int) load.readObject();
+                // Close the file.
+                load.close(); // This also closes saveFile.
+
+            }
+        } catch (Exception exc) {
+            exc.printStackTrace(); // If there was an error, print the info.
+        }
+
+        return turn;
     }
 }

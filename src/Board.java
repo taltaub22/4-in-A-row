@@ -8,7 +8,6 @@ public class Board implements Consts {
     private GraphicalBoard gb;
     private LogicalBoard lb;
 
-
     public Board() {
         lb = new LogicalBoard();
         gb = new GraphicalBoard();
@@ -38,7 +37,7 @@ public class Board implements Consts {
         } catch (NotInBoardException e) {
             e.printStackTrace();
         } catch (ColumnFullException e) {
-            JOptionPane.showMessageDialog(null,"Column is full, choose another one.");
+            JOptionPane.showMessageDialog(null, "Column is full, choose another one.");
         }
         return row;
     }
@@ -59,5 +58,15 @@ public class Board implements Consts {
                 return false;
         }
         return true;
+    }
+
+    public void save(int turn) {
+        lb.save(turn);
+    }
+
+    public int load() {
+        int turn = lb.load();
+        gb.initBoard(lb.getBoard());
+        return turn;
     }
 }
