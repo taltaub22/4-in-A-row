@@ -29,7 +29,7 @@ public class GraphicalChecker extends JLabel implements Consts {
 
     public void setPlayer(Consts.PLAYERS player) {
         this.player = player;
-        repaint();
+        paintImmediately(0, 0, 150, 150);
     }
 
     @Override

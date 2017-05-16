@@ -43,13 +43,12 @@ public class GraphicalBoard extends JPanel implements Consts {
 
     public void insertChecker(int col, int row, PLAYERS player) {
         int i = 0;
-        int gravity = 25;
         for (; i >= 0 && i < row; i++) {
 
             board[i][col].setPlayer(player);
 
             try {
-                Thread.sleep(200 - (gravity * i));
+                Thread.sleep(150 - (i * 25));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
