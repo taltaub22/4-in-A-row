@@ -63,6 +63,6 @@ public class GraphicalBoard extends JPanel implements Consts {
 
     public void undoMove(int col, int row) {
         board[row][col].setPlayer(PLAYERS.NONE);
-        repaint(0);
+        paintImmediately(0, 0, 1000, 800);
     }
 }

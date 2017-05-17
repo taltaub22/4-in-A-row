@@ -102,6 +102,7 @@ public class Game extends JFrame implements Consts {
                 dispose();
             }
         });
+        exit.setAccelerator(KeyStroke.getKeyStroke((char) KeyEvent.VK_ESCAPE));
 
 
         /*---------------------------------GAME------------------------------------*/
