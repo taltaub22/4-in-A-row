@@ -11,7 +11,7 @@ public class GraphicalBoard extends JPanel implements Consts {
     public GraphicalBoard() {
         board = new GraphicalChecker[6][7];
         initBoard();
-        setSize(1036, 800);
+        setSize(1036, 880);
         setLayout(new GridLayout(6, 7, 0, 0));
         setVisible(true);
     }

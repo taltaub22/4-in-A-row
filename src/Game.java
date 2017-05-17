@@ -92,7 +92,7 @@ public class Game extends JFrame implements Consts {
         undo.setAccelerator(KeyStroke.getKeyStroke(
                 KeyEvent.VK_Z, ActionEvent.CTRL_MASK));
 
-
+        //Exit
         JMenuItem exit = new JMenuItem("Exit");
         file.add(exit);
         exit.addActionListener(new ActionListener() {
@@ -171,8 +171,8 @@ public class Game extends JFrame implements Consts {
 
                                 /*----------AI: CHANGE HERE---------*/
 
-                                simpleComputerAI();
-//                                negaMaxComputerAI();
+//                                simpleComputerAI();
+                                negaMaxComputerAI();
 
                                 /*----------------------------------*/
 
@@ -299,10 +299,6 @@ public class Game extends JFrame implements Consts {
         computer.negaMax(computer.getDepth(), PLAYERS.PLAYER2);
         bestCol = computer.getBestCol();
         board.insertChecker(bestCol, PLAYERS.PLAYER2);
-    }
-
-    private void alphaBetaComputerAI() {
-        //TODO: implement
     }
 
 }
